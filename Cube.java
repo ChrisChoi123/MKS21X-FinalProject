@@ -46,29 +46,36 @@ public class Cube{
     return output+="]";
   }
 
+  private void rotateSide(int face){
+    // The 90 degree rotation of a side of a cube moves the pieces around
+    // irregularily. so we resort to a manual method of moving the colors around
+    char color0 = data[face][0];
+    char color1 = data[face][1];
+    char color2 = data[face][2];
+    char color3 = data[face][3];
+    char color4 = data[face][5];
+    char color5 = data[face][6];
+    char color6 = data[face][7];
+    char color7 = data[face][8];
+    data[face][0] = color5;
+    data[face][1] = color3;
+    data[face][2] = color0;
+    data[face][3] = color6;
+    data[face][5] = color1;
+    data[face][6] = color7;
+    data[face][7] = color4;
+    data[face][8] = color2;
+    //The color at index 4 is ommited from this method because it is located at
+    //the center and does not move
+  }
+
+  private void rotateAround(int faceBack, int faceRight, int faceFront, int faceLeft) {
+    
+  }
+
   public static void main(String args[]){
     Cube c1 = new Cube();
     System.out.print(c1);
-  }
-
-  private void rotate(int face){
-      char color0 = data[face][0];
-      char color1 = data[face][1];
-      char color2 = data[face][2];
-      char color3 = data[face][3];
-      char color4 = data[face][4];
-      char color5 = data[face][6];
-      char color6 = data[face][7];
-      char color7 = data[face][8];
-
-      data[face][0] = color5;
-      data[face][1] = color3;
-      data[face][2] = color0;
-      data[face][3] = color6;
-      data[face][5] = color6;
-      data[face][6] = color1;
-      data[face][7] = color7;
-      data[face][8] = color2;
   }
 
 
