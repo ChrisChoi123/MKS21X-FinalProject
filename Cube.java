@@ -198,7 +198,17 @@ public class Cube{
     rotateAround(index);
   }
 
-  private int[] getSidesAlongOrbit(int index) {
+  /**It manually determines the values that lie along an orbit of the cube.
+    *There are 3 orbits on a Rubik's Cube, one for each direction along the
+    *the x,y,and z axis.
+    *
+    *@param orbit is the orbit that the method is determining the sides for.
+    *@return the 4 sides that lie along a given direction. Returns them starting from the lowest
+    *index, and goes in clockwise order relative to the respective side determined by
+    *standard cubing conventions
+    *
+    */
+  private static int[] getSidesAlongOrbit(int orbit) {
     if (index == 0) {
       return new int[] {0,1,5,3};
     }
@@ -210,7 +220,16 @@ public class Cube{
     }
   }
 
-  private int[] getValuesAlongOrbit(int index) {
+  /**It manually determines the indices of the values that lie along an orbit of the cube.
+    *It is like tracing along an equator of the cube.
+    *
+    *@param orbit is the orbit that the method is determining the values for.
+    *@return the 4 sides that lie along a given direction. Returns them starting from the lowest
+    *index of the lowest index side, and goes in clockwise order relative to the respective side determined by
+    *standard cubing conventions
+    *
+    */
+  private static int[] getValuesAlongOrbit(int orbt) {
     if (index == 0) {
       return new int[] {1,4,7,1,4,7,7,4,1,1,4,7};
     }
@@ -222,7 +241,7 @@ public class Cube{
     }
   }
 
-  public void slice(int index) {
+  public void slice(int orbit) {
     int[] valsOrb = getValuesAlongOrbit(index);
     int[] cycledValsOrb = cycleArray(valsOrb);
     int[] sidesOrb = getSidesAlongOrbit(index);
