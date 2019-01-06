@@ -268,45 +268,60 @@ public class Cube{
     data[sidesOrb[0]][valsOrb[2]] = storage2;
   }
 
+  public void normalMove(String move){
+    if (move.equals("U")){ rotate(0);}
+    else if (move.equals("F")){ rotate(1);}
+    else if (move.equals("R")){ rotate(2);}
+    else if (move.equals("B")){ rotate(3);}
+    else if (move.equals("L")){ rotate(4);}
+    else if (move.equals("D")){ rotate(5);}
+    //slice turns
+    else if (move.equals("M")){ slice(0);}
+    else if (move.equals("E")){ slice(1);}
+    else if (move.equals("S")){ slice(2);}
+    //double layer turns
+    else if (move.equals("u")){ rotate(0); slice(1); slice(1); slice(1);}
+    else if  (move.equals("f")){ rotate(1); slice(2);}
+    else if (move.equals("r")){ rotate(2); slice(0); slice(0); slice(0);}
+    else if (move.equals("b")){ rotate(3); slice(2); slice(2); slice(2);}
+    else if (move.equals("l")){ rotate(4); slice(0);}
+    else if  (move.equals("d")){ rotate(5); slice(1);}
+    //rotations
+    else if (move.equals("x")){ rotate(4); rotate(4); rotate(4); rotate(2); slice(0); slice(0); slice(0);}
+    else if (move.equals("y")){ rotate(0); rotate(5); rotate(5); rotate(5); slice(1); slice(1); slice(1);}
+    else {rotate(1); rotate(3); rotate(3); rotate(3); slice(2);}
+  }
+
+  public void inverseMove(String move){
+    for (int i = 0; i < 3; i++){
+      normalMove(move);
+    }
+  }
+
+  public void doubleMove(String move){
+    for (int i = 0; i < 2; i++){
+      normalMove(move);
+    }
+  }
+
+  public void performMove(String move){
+    if (move.length() == 0){
+      normalMove(move);
+    }
+    else if (move.substring(0,1).equals("2")){
+      doubleMove(move);
+    }
+    else{
+      inverseMove(move);
+    }
+  }
+
   /**Used for testing the functionality of methods at certain points.
     *
     */
   public static void main(String args[]){
     Cube c1 = new Cube();
-    String move = args[0];
-    String kinds = move.substring(0, move.length() - 1);
-    int rep = Integer.parseInt(move.substring(move.length() - 1));
-
-      if (kinds.equals("F")){
-        for(int i = 0; i < rep; i++){
-          c1.rotate(0);
-        }
-      }
-      else if (kinds.equals("D")){
-        for(int i = 0; i < rep; i++){
-          c1.rotate(1);
-        }
-      }
-      else if (kinds.equals("R")){
-        for(int i = 0; i < rep; i++){
-          c1.rotate(2);
-        }
-      }
-      else if (kinds.equals("U")){
-        for(int i = 0; i < rep; i++){
-          c1.rotate(3);
-        }
-      }
-      else if (kinds.equals("L")){
-        for(int i = 0; i < rep; i++){
-          c1.rotate(4);
-        }
-      }
-      else {
-        for(int i = 0; i < rep; i++){
-          c1.rotate(5);
-        }
-      }
+    c1.performMove("R");
 
     System.out.println(c1);
   }
