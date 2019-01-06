@@ -1,7 +1,11 @@
 public class Cube{
   private char[][] data;
 
-
+  /**Constructs the main cube used for the simulation, in a solved state.
+    *Creates a 2d array of characters representing the first letter of the colors
+    *of the standard Rubik's Cube, White, Green, Red, Blue, Orange, Yellow.
+    *Order of the chars are mostly abitrary.
+    */
   public Cube(){
     data = new char[6][9];
     for (int i = 0;i < 6;i++) {
@@ -28,6 +32,8 @@ public class Cube{
     }
   }
 
+  /**Converts the data to String, so troubleshooting code is possible.
+    */
   public String toString(){
     String output = "[";
     for (int i = 0;i < 6;i++) {
@@ -45,10 +51,15 @@ public class Cube{
     }
     return output+="]";
   }
-
+  /**Rotates the chars of a particular side by 90 degrees.
+    *It is one part of visualising the rotation of a layer.
+    *
+    *@param face is the index of the face being rotated.
+    */
   private void rotateSide(int face){
-    // The 90 degree rotation of a side of a cube moves the pieces around
-    // irregularily. so we resort to a manual method of moving the colors around
+    /*The 90 degree rotation of a side of a cube moves the pieces around
+     *irregularily. so we resort to a manual method of moving the colors around.
+     */
     char color0 = data[face][0];
     char color1 = data[face][1];
     char color2 = data[face][2];
@@ -65,10 +76,18 @@ public class Cube{
     data[face][6] = color7;
     data[face][7] = color4;
     data[face][8] = color2;
-    //The color at index 4 is ommited from this method because it is located at
-    //the center and does not move
+    /*The color at index 4 is ommited from this method because it is located at
+     *the center and does not move
+     */
   }
 
+  /**It manually determines the faces that are adjacent to a given side.
+    *There are 6 sides on a Rubik's Cube, so there are 6 if statements, 1 for each case.
+    *
+    *@param index is the index of the face that the method is determining the adjacent sides for.
+    *@return the 4 adjacent sides of a given side. Returns them starting from the top one, relative
+    *        to the side, and goes in clockwise order.
+    */
   private static int[] getSidesAdjacent(int index){
     if (index == 0) {
       return new int[] {3,2,1,4};
@@ -89,6 +108,17 @@ public class Cube{
       return new int[] {3,4,1,2};
     }
   }
+
+  /**It manually determines the indices that surround a given side.
+    *Each side of a Rubik's Cube is adjacent to 4 different sides, and each of those
+    *sides have 3 stickers that border the edge of the original side. Since our way of
+    *storing the data of each side isn't the same orientation for each side, the order
+    *of the indices of the stickers is unique for each side.
+    *
+    *@param index is the index of the face that the method is determining the surrounding indices for.
+    *@return the 12 indices that surround the side, starting from the top left, relatively, and
+    *        going in a clockwise fashion around the given side.
+    */
   private static int[] getValuesSurrounding(int index) {
     if (index == 0) {
       return new int[] {6,7,8,0,3,6,2,1,0,8,5,2};
@@ -109,7 +139,16 @@ public class Cube{
       return new int[] {2,1,0,0,3,6,6,7,8,8,5,2};
     }
   }
-  public static int[] cycleArray(int[] ary) {
+
+  /**Shifts a given array by 3 indices to the right. The last 3 elements of the array
+    * go to the front. This method is used in the rotateAround() method to cycle the
+    *array returned by getValuesSurrounding() to make them have the same index when
+    *being called.
+    *
+    *@param ary is the int[] array that the method will shift.
+    *@return the shifted int[] array
+    */
+  private static int[] cycleArray(int[] ary) {
     int[] output = new int[ary.length];
     output[0] = ary[9];
     output[1] = ary[10];
@@ -120,6 +159,15 @@ public class Cube{
     return output;
   }
 
+  /**Rotates the chars of the stickers directly bordering the edge of a given side.
+    *The rotation of the chars is done manually for each case because it is
+    *extremely difficult to construct a suitable for loop that increments correctly
+    *for each index we are accessing.
+    *The shifting is done in sets of 3, one for each sticker of a bordering side.
+    *
+    *@param index is the index of the side this method will cycle through.
+    *
+    */
   private void rotateAround(int index) {
     int[] valsSur = getValuesSurrounding(index);
     int[] cycledValsSur = cycleArray(valsSur);
@@ -140,17 +188,26 @@ public class Cube{
     data[sidesAdj[1]][valsSur[4]] = storage1;
     data[sidesAdj[1]][valsSur[5]] = storage2;
   }
+
+  /**Performs the full 90 degrees clockwise rotation of a layer, by using the two helper methods.
+    *The first one rotates just the stickers on the side while the other method rotates the stickers
+    *around the side. The order of the two methods is irrelevent, since they are independent of each other.
+    *
+    *@param index is the index of the side being rotated.
+    *
+    */
   public void rotate(int index) {
     rotateSide(index);
     rotateAround(index);
   }
 
+  /**Used for testing the functionality of methods at certain points. 
+    *
+    */
   public static void main(String args[]){
     Cube c1 = new Cube();
     System.out.println(c1);
-    c1.rotate(0);
+    c1.rotate(5);
     System.out.println(c1);
   }
-
-
 }
