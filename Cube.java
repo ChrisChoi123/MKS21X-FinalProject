@@ -89,7 +89,27 @@ public class Cube{
       return new int[] {3,4,1,2};
     }
   }
-  public static int[] cycleValues(int[] ary) {
+  private static int[] getValuesSurrounding(int index) {
+    if (index == 0) {
+      return new int[] {6,7,8,0,3,6,2,1,0,8,5,2};
+    }
+    else if (index == 1) {
+      return new int[] {6,7,8,6,7,8,6,7,8,6,7,8};
+    }
+    else if (index == 2) {
+      return new int[] {8,5,2,0,3,6,8,5,2,8,5,2};
+    }
+    else if (index == 3) {
+      return new int[] {2,1,0,2,1,0,2,1,0,2,1,0};
+    }
+    else if (index == 4) {
+      return new int[] {0,3,6,0,3,6,0,3,6,8,5,2};
+    }
+    else {
+      return new int[] {2,1,0,0,3,6,6,7,8,8,5,2};
+    }
+  }
+  public static int[] cycleArray(int[] ary) {
     int[] output = new int[ary.length];
     output[0] = ary[9];
     output[1] = ary[10];
@@ -98,28 +118,38 @@ public class Cube{
       output[i+3] = ary[i];
     }
     return output;
-
   }
 
   private void rotateAround(int index) {
-    if (index == 0) {
-      int[] valuesToRotate = new int[] {3,5,1,0};
-    }
-    else if (index == 0) {
-      int[] valuesToRotate = new int[] {3,5,1,0};
-    }
+    int[] valsSur = getValuesSurrounding(index);
+    int[] cycledValsSur = cycleArray(valsSur);
+    int[] sidesAdj = getSidesAdjacent(index);
+    char storage0 = data[sidesAdj[0]][valsSur[0]];
+    char storage1 = data[sidesAdj[0]][valsSur[1]];
+    char storage2 = data[sidesAdj[0]][valsSur[2]];
+    data[sidesAdj[0]][valsSur[0]] = data[sidesAdj[3]][cycledValsSur[0]];
+    data[sidesAdj[0]][valsSur[1]] = data[sidesAdj[3]][cycledValsSur[1]];
+    data[sidesAdj[0]][valsSur[2]] = data[sidesAdj[3]][cycledValsSur[2]];
+    data[sidesAdj[3]][valsSur[9]] = data[sidesAdj[2]][cycledValsSur[9]];
+    data[sidesAdj[3]][valsSur[10]] = data[sidesAdj[2]][cycledValsSur[10]];
+    data[sidesAdj[3]][valsSur[11]] = data[sidesAdj[2]][cycledValsSur[11]];
+    data[sidesAdj[2]][valsSur[6]] = data[sidesAdj[1]][cycledValsSur[6]];
+    data[sidesAdj[2]][valsSur[7]] = data[sidesAdj[1]][cycledValsSur[7]];
+    data[sidesAdj[2]][valsSur[8]] = data[sidesAdj[1]][cycledValsSur[8]];
+    data[sidesAdj[1]][valsSur[3]] = storage0;
+    data[sidesAdj[1]][valsSur[4]] = storage1;
+    data[sidesAdj[1]][valsSur[5]] = storage2;
+  }
+  public void rotate(int index) {
+    rotateSide(index);
+    rotateAround(index);
   }
 
   public static void main(String args[]){
     Cube c1 = new Cube();
     System.out.println(c1);
-    c1.rotateSide(1);
+    c1.rotate(0);
     System.out.println(c1);
-    int[] output = new int[] {0,1,2,3,4,5,6,7,8,9,10,11};
-    cycleValues(output);
-    for (int i = 0;i < cycleValues(output).length;i++) {
-      System.out.println(cycleValues(output)[i]);
-    }
   }
 
 
