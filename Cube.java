@@ -209,10 +209,10 @@ public class Cube{
     *
     */
   private static int[] getSidesAlongOrbit(int orbit) {
-    if (index == 0) {
+    if (orbit == 0) {
       return new int[] {0,1,5,3};
     }
-    else if (index == 1) {
+    else if (orbit == 1) {
       return new int[] {1,2,3,4};
     }
     else {
@@ -229,11 +229,11 @@ public class Cube{
     *standard cubing conventions
     *
     */
-  private static int[] getValuesAlongOrbit(int orbt) {
-    if (index == 0) {
+  private static int[] getValuesAlongOrbit(int orbit) {
+    if (orbit == 0) {
       return new int[] {1,4,7,1,4,7,7,4,1,1,4,7};
     }
-    else if (index == 1) {
+    else if (orbit == 1) {
       return new int[] {3,4,5,7,4,1,5,4,3,1,4,7};
     }
     else {
@@ -241,10 +241,19 @@ public class Cube{
     }
   }
 
+  /**Performs a 90 degree slice turn by cycling the chars of the stickers
+    *that run along an orbit of the puzzle.
+    *The rotation of the chars is done by storing the last 3 values in variables, then
+    *looping down the list of values.
+    *The shifting is done in sets of 3, one for each sticker on a side.
+    *
+    *@param orbit is the orbit that runs around one of the 3 axes of the puzzle..
+    *
+    */
   public void slice(int orbit) {
-    int[] valsOrb = getValuesAlongOrbit(index);
+    int[] valsOrb = getValuesAlongOrbit(orbit);
     int[] cycledValsOrb = cycleArray(valsOrb);
-    int[] sidesOrb = getSidesAlongOrbit(index);
+    int[] sidesOrb = getSidesAlongOrbit(orbit);
     char storage0 = data[sidesOrb[3]][valsOrb[9]];
     char storage1 = data[sidesOrb[3]][valsOrb[10]];
     char storage2 = data[sidesOrb[3]][valsOrb[11]];
@@ -266,7 +275,12 @@ public class Cube{
   public static void main(String args[]){
     Cube c1 = new Cube();
     System.out.println(c1);
+    c1.slice(0);
+    c1.slice(0);
     c1.slice(1);
+    c1.slice(1);
+    c1.slice(2);
+    c1.slice(2);
     System.out.println(c1);
   }
 }
