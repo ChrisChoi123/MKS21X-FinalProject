@@ -198,9 +198,47 @@ public class Cube{
     rotateAround(index);
   }
 
-  public void rotate2(int index) {
-    rotateSide(index);
-    rotateAround2(index);
+  private int[] getSidesAlongOrbit(int index) {
+    if (index == 0) {
+      return new int[] {0,1,5,3};
+    }
+    else if (index == 1) {
+      return new int[] {1,2,3,4};
+    }
+    else {
+      return new int[] {0,2,5,4};
+    }
+  }
+
+  private int[] getValuesAlongOrbit(int index) {
+    if (index == 0) {
+      return new int[] {1,4,7,1,4,7,7,4,1,1,4,7};
+    }
+    else if (index == 1) {
+      return new int[] {3,4,5,7,4,1,5,4,3,1,4,7};
+    }
+    else {
+      return new int[] {3,4,5,3,4,5,3,4,5,3,4,5};
+    }
+  }
+
+  public void slice(int index) {
+    int[] valsOrb = getValuesAlongOrbit(index);
+    int[] cycledValsOrb = cycleArray(valsOrb);
+    int[] sidesOrb = getSidesAlongOrbit(index);
+    char storage0 = data[sidesOrb[3]][valsOrb[9]];
+    char storage1 = data[sidesOrb[3]][valsOrb[10]];
+    char storage2 = data[sidesOrb[3]][valsOrb[11]];
+    int position = 11;
+    for (int i = 3; i > 0;i--) {
+      for (int j = 0; j < 3;j++) {
+        data[sidesOrb[i]][valsOrb[position]] = data[sidesOrb[i-1]][cycledValsOrb[position]];
+        position--;
+      }
+    }
+    data[sidesOrb[0]][valsOrb[0]] = storage0;
+    data[sidesOrb[0]][valsOrb[1]] = storage1;
+    data[sidesOrb[0]][valsOrb[2]] = storage2;
   }
 
   /**Used for testing the functionality of methods at certain points.
@@ -209,19 +247,7 @@ public class Cube{
   public static void main(String args[]){
     Cube c1 = new Cube();
     System.out.println(c1);
-    c1.rotate(5);
-    c1.rotate(2);
-    c1.rotate(1);
-    c1.rotate(4);
+    c1.slice(1);
     System.out.println(c1);
-    String version1 = c1.toString();
-    Cube c2 = new Cube();
-    c2.rotate2(5);
-    c2.rotate2(2);
-    c2.rotate2(1);
-    c2.rotate2(4);
-    System.out.println(c2);
-    String version2 = c2.toString();
-    System.out.println(version1.equals(version2));
   }
 }
