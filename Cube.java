@@ -160,9 +160,8 @@ public class Cube{
   }
 
   /**Rotates the chars of the stickers directly bordering the edge of a given side.
-    *The rotation of the chars is done manually for each case because it is
-    *extremely difficult to construct a suitable for loop that increments correctly
-    *for each index we are accessing.
+    *The rotation of the chars is done by storing the last 3 values in variables, then
+    *looping down the list of values.
     *The shifting is done in sets of 3, one for each sticker of a bordering side.
     *
     *@param index is the index of the side this method will cycle through.
@@ -172,21 +171,19 @@ public class Cube{
     int[] valsSur = getValuesSurrounding(index);
     int[] cycledValsSur = cycleArray(valsSur);
     int[] sidesAdj = getSidesAdjacent(index);
-    char storage0 = data[sidesAdj[0]][valsSur[0]];
-    char storage1 = data[sidesAdj[0]][valsSur[1]];
-    char storage2 = data[sidesAdj[0]][valsSur[2]];
-    data[sidesAdj[0]][valsSur[0]] = data[sidesAdj[3]][cycledValsSur[0]];
-    data[sidesAdj[0]][valsSur[1]] = data[sidesAdj[3]][cycledValsSur[1]];
-    data[sidesAdj[0]][valsSur[2]] = data[sidesAdj[3]][cycledValsSur[2]];
-    data[sidesAdj[3]][valsSur[9]] = data[sidesAdj[2]][cycledValsSur[9]];
-    data[sidesAdj[3]][valsSur[10]] = data[sidesAdj[2]][cycledValsSur[10]];
-    data[sidesAdj[3]][valsSur[11]] = data[sidesAdj[2]][cycledValsSur[11]];
-    data[sidesAdj[2]][valsSur[6]] = data[sidesAdj[1]][cycledValsSur[6]];
-    data[sidesAdj[2]][valsSur[7]] = data[sidesAdj[1]][cycledValsSur[7]];
-    data[sidesAdj[2]][valsSur[8]] = data[sidesAdj[1]][cycledValsSur[8]];
-    data[sidesAdj[1]][valsSur[3]] = storage0;
-    data[sidesAdj[1]][valsSur[4]] = storage1;
-    data[sidesAdj[1]][valsSur[5]] = storage2;
+    char storage0 = data[sidesAdj[3]][valsSur[9]];
+    char storage1 = data[sidesAdj[3]][valsSur[10]];
+    char storage2 = data[sidesAdj[3]][valsSur[11]];
+    int position = 11;
+    for (int i = 3; i > 0;i--) {
+      for (int j = 0; j < 3;j++) {
+        data[sidesAdj[i]][valsSur[position]] = data[sidesAdj[i-1]][cycledValsSur[position]];
+        position--;
+      }
+    }
+    data[sidesAdj[0]][valsSur[0]] = storage0;
+    data[sidesAdj[0]][valsSur[1]] = storage1;
+    data[sidesAdj[0]][valsSur[2]] = storage2;
   }
 
   /**Performs the full 90 degrees clockwise rotation of a layer, by using the two helper methods.
@@ -201,13 +198,30 @@ public class Cube{
     rotateAround(index);
   }
 
-  /**Used for testing the functionality of methods at certain points. 
+  public void rotate2(int index) {
+    rotateSide(index);
+    rotateAround2(index);
+  }
+
+  /**Used for testing the functionality of methods at certain points.
     *
     */
   public static void main(String args[]){
     Cube c1 = new Cube();
     System.out.println(c1);
     c1.rotate(5);
+    c1.rotate(2);
+    c1.rotate(1);
+    c1.rotate(4);
     System.out.println(c1);
+    String version1 = c1.toString();
+    Cube c2 = new Cube();
+    c2.rotate2(5);
+    c2.rotate2(2);
+    c2.rotate2(1);
+    c2.rotate2(4);
+    System.out.println(c2);
+    String version2 = c2.toString();
+    System.out.println(version1.equals(version2));
   }
 }
