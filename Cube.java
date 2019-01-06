@@ -89,9 +89,25 @@ public class Cube{
       return new int[] {3,4,1,2};
     }
   }
+  public static int[] cycleValues(int[] ary) {
+    int[] output = new int[ary.length];
+    output[0] = ary[9];
+    output[1] = ary[10];
+    output[2] = ary[11];
+    for (int i = 0;i < 9;i++) {
+      output[i+3] = ary[i];
+    }
+    return output;
 
-  private void rotateAround(int face) {
+  }
 
+  private void rotateAround(int index) {
+    if (index == 0) {
+      int[] valuesToRotate = new int[] {3,5,1,0};
+    }
+    else if (index == 0) {
+      int[] valuesToRotate = new int[] {3,5,1,0};
+    }
   }
 
   public static void main(String args[]){
@@ -99,6 +115,11 @@ public class Cube{
     System.out.println(c1);
     c1.rotateSide(1);
     System.out.println(c1);
+    int[] output = new int[] {0,1,2,3,4,5,6,7,8,9,10,11};
+    cycleValues(output);
+    for (int i = 0;i < cycleValues(output).length;i++) {
+      System.out.println(cycleValues(output)[i]);
+    }
   }
 
 
