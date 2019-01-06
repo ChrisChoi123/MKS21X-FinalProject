@@ -70,44 +70,24 @@ public class Cube{
   }
 
   private static int[] getSidesAdjacent(int index){
-    int[] output = new int[4];
     if (index == 0) {
-      output[0] = 3;
-      output[1] = 2;
-      output[2] = 1;
-      output[3] = 4;
+      return new int[] {3,2,1,4};
     }
     else if (index == 1) {
-      output[0] = 0;
-      output[1] = 2;
-      output[2] = 5;
-      output[3] = 4;
+      return new int[] {0,2,5,4};
     }
     else if (index == 2) {
-      output[0] = 3;
-      output[1] = 5;
-      output[2] = 1;
-      output[3] = 0;
+      return new int[] {3,5,1,0};
     }
     else if (index == 3) {
-      output[0] = 5;
-      output[1] = 2;
-      output[2] = 0;
-      output[3] = 4;
+      return new int[] {5,2,0,4};
     }
     else if (index == 4) {
-      output[0] = 3;
-      output[1] = 0;
-      output[2] = 1;
-      output[3] = 5;
+      return new int[] {3,0,1,5};
     }
-    else if (index == 5) {
-      output[0] = 3;
-      output[1] = 4;
-      output[2] = 1;
-      output[3] = 2;
+    else {
+      return new int[] {3,4,1,2};
     }
-    return output;
   }
 
   private void rotateAround(int face) {
