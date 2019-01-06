@@ -1,6 +1,5 @@
 public class Cube{
   private char[][] data;
-
   /**Constructs the main cube used for the simulation, in a solved state.
     *Creates a 2d array of characters representing the first letter of the colors
     *of the standard Rubik's Cube, White, Green, Red, Blue, Orange, Yellow.
@@ -274,13 +273,41 @@ public class Cube{
     */
   public static void main(String args[]){
     Cube c1 = new Cube();
-    System.out.println(c1);
-    c1.slice(0);
-    c1.slice(0);
-    c1.slice(1);
-    c1.slice(1);
-    c1.slice(2);
-    c1.slice(2);
+    String move = args[0];
+    String kinds = move.substring(0, move.length() - 1);
+    int rep = Integer.parseInt(move.substring(move.length() - 1));
+
+      if (kinds.equals("F")){
+        for(int i = 0; i < rep; i++){
+          c1.rotate(0);
+        }
+      }
+      else if (kinds.equals("D")){
+        for(int i = 0; i < rep; i++){
+          c1.rotate(1);
+        }
+      }
+      else if (kinds.equals("R")){
+        for(int i = 0; i < rep; i++){
+          c1.rotate(2);
+        }
+      }
+      else if (kinds.equals("U")){
+        for(int i = 0; i < rep; i++){
+          c1.rotate(3);
+        }
+      }
+      else if (kinds.equals("L")){
+        for(int i = 0; i < rep; i++){
+          c1.rotate(4);
+        }
+      }
+      else {
+        for(int i = 0; i < rep; i++){
+          c1.rotate(5);
+        }
+      }
+
     System.out.println(c1);
   }
 }
