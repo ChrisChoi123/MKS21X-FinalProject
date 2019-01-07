@@ -268,6 +268,15 @@ public class Cube{
     data[sidesOrb[0]][valsOrb[2]] = storage2;
   }
 
+  /** Perform the normal move.
+  Each move does a 90-degree clockwise rotation.
+  *Clockwise face rotation: U(up), F(front), R(right), B(back), L(left), D(down)
+  *Slice turns: M(Middle layer), E(Equatorial layer), S(Standing layer)
+  *Double layer turns: u, f, r, b, l, d
+  *Whole cube rotation: x(rotate the cube on the X axis), y(Y axis), z(Z axis)
+  *@param move is the Rubik's Cube Notation that the method is performing the
+  * move accordingly.
+  */
   public void normalMove(String move){
     if (move.equals("U")){ rotate(0);}
     else if (move.equals("F")){ rotate(1);}
@@ -292,18 +301,30 @@ public class Cube{
     else {rotate(1); rotate(3); rotate(3); rotate(3); slice(2);}
   }
 
+  /**Perform the inverse move.
+  *Each move does a 90-degree counterclockwise rotation.
+  *It is notated with prime symbol.
+  *i.e) U' does a counterclockwise U-rotation.
+  */
   public void inverseMove(String move){
     for (int i = 0; i < 3; i++){
       normalMove(move);
     }
   }
 
+  /**Perform the double move.
+  *Each move repeats twice in the same direction.
+  *i.e) U2 does a U-rotation twice.
+  */
   public void doubleMove(String move){
     for (int i = 0; i < 2; i++){
       normalMove(move);
     }
   }
 
+  /** Perform all possible single move of Rubik's Cube
+  * by using three helper methods.
+  */
   public void performMove(String move){
     if (move.length() == 1){
       normalMove(move);
@@ -316,6 +337,8 @@ public class Cube{
     }
   }
 
+  /** Perform a series of moves
+  */
   public void performMoveSet(String moves) {
     String[] movesToPerform = moves.split(" ");
     for (int i = 0; i < movesToPerform.length;i++) {
