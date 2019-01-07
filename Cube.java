@@ -325,6 +325,8 @@ public class Cube{
     }
   }
 
+  /** Reset the cube to the original form.
+  */
   public void reset(){
     for (int i = 0;i < 6;i++) {
       for (int j = 0;j < 9;j++) {
@@ -350,6 +352,9 @@ public class Cube{
     }
   }
 
+  /** Check if the Rubik's Cube is solved.
+      Compare the color of the first piece with the rest of pieces on the same side.
+  */
   public boolean isSolved(){
     boolean match = true;
     for (int i = 0; i < 6; i++){
