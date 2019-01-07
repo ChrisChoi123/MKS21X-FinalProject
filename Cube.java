@@ -305,14 +305,21 @@ public class Cube{
   }
 
   public void performMove(String move){
-    if (move.length() == 0){
+    if (move.length() == 1){
       normalMove(move);
     }
-    else if (move.substring(0,1).equals("2")){
-      doubleMove(move);
+    else if (move.substring(1,2).equals("2")){
+      doubleMove(move.substring(0,1));
     }
     else{
-      inverseMove(move);
+      inverseMove(move.substring(0,1));
+    }
+  }
+
+  public void performMoveSet(String moves) {
+    String[] movesToPerform = moves.split(" ");
+    for (int i = 0; i < movesToPerform.length;i++) {
+      performMove(movesToPerform[i]);
     }
   }
 
@@ -321,8 +328,9 @@ public class Cube{
     */
   public static void main(String args[]){
     Cube c1 = new Cube();
-    c1.performMove("R");
-
+    String scramble = "F' L2 D2 R B2 L2 U2 R U2 R F2 R2 B2 D' B2 L F' R2 D L U";
+    c1.performMoveSet(scramble);
+    c1.performMove("x");
     System.out.println(c1);
   }
 }
