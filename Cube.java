@@ -332,5 +332,12 @@ public class Cube{
     c1.performMoveSet(scramble);
     c1.performMove("x");
     System.out.println(c1);
+
+    Cube c2 = new Cube();
+    String scramble1 = "M U' M' U2 M U M U M2 U M'";
+    c2.performMoveSet(scramble1);
+    c2.performMove("x");
+    System.out.println(c2);
+
   }
 }
