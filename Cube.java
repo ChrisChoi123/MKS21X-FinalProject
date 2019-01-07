@@ -7,28 +7,7 @@ public class Cube{
     */
   public Cube(){
     data = new char[6][9];
-    for (int i = 0;i < 6;i++) {
-      for (int j = 0;j < 9;j++) {
-        if (i == 0) {
-          data[i][j] = 'W';
-        }
-        else if (i == 1) {
-          data[i][j] = 'G';
-        }
-        else if (i == 2) {
-          data[i][j] = 'R';
-        }
-        else if (i == 3) {
-          data[i][j] = 'B';
-        }
-        else if (i == 4) {
-          data[i][j] = 'O';
-        }
-        else{
-          data[i][j] = 'Y';
-        }
-      }
-    }
+    reset();
   }
 
   /**Converts the data to String, so troubleshooting code is possible.
@@ -346,6 +325,44 @@ public class Cube{
     }
   }
 
+  public void reset(){
+    for (int i = 0;i < 6;i++) {
+      for (int j = 0;j < 9;j++) {
+        if (i == 0) {
+          data[i][j] = 'W';
+        }
+        else if (i == 1) {
+          data[i][j] = 'G';
+        }
+        else if (i == 2) {
+          data[i][j] = 'R';
+        }
+        else if (i == 3) {
+          data[i][j] = 'B';
+        }
+        else if (i == 4) {
+          data[i][j] = 'O';
+        }
+        else{
+          data[i][j] = 'Y';
+        }
+      }
+    }
+  }
+
+  public boolean isSolved(){
+    boolean match = true;
+    for (int i = 0; i < 6; i++){
+      char color = data[i][0];
+      for (int g = 0; g < 9; g++){
+        if (color != data[i][g]){
+          match = false;
+      }
+    }
+  }
+  return match;
+}
+
   /**Used for testing the functionality of methods at certain points.
     *
     */
@@ -355,12 +372,12 @@ public class Cube{
     c1.performMoveSet(scramble);
     c1.performMove("x");
     System.out.println(c1);
+    System.out.println(c1.isSolved());
 
     Cube c2 = new Cube();
     String scramble1 = "M U' M' U2 M U M U M2 U M'";
     c2.performMoveSet(scramble1);
     c2.performMove("x");
     System.out.println(c2);
-
   }
 }
