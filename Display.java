@@ -15,6 +15,36 @@ public class Display {
 			screen.setCharacter(x+i, y, new TextCharacter(str.charAt(i)));
 		}
 	}
+	private void drawSticker(int side, int index, int x, int y,Screen screen) {
+		int storeY = y;
+		for (int i = 0;i < 2;i++) {
+			for (int j = 0; j < 3;j++) {
+				screen.setCharacter(x+j,storeY,drawColor(side,index));
+			}
+			storeY++;
+		}
+
+	}
+	private void drawSide(int side,int startX, int startY,Screen screen) {
+		int storeStartY = startY;
+		int currentSticker = 0;
+		for (int i = 0;i < 3;i++) {
+			for (int j = 0;j < 3;j++) {
+				drawSticker(side,currentSticker,startX+(3*j),storeStartY,sceen);
+				currentSticker++;
+			}
+			storeStartY += 2;
+		}
+	}
+
+	public void drawCube(int startX, int startY,Screen screen){
+		drawSide(3,startX,startY);
+		drawSide(4,startX-9,startY+6);
+		drawSide(0,startX,startY+6);
+		drawSide(2,startX+9,startY+6);
+		drawSide(5,startX+18,startY+6);
+		drawSide(1,startX,startY+12);
+	}
 
 	public static void main(String[] args) throws IOException {
 
@@ -26,6 +56,8 @@ public class Display {
 
 		long tStart = System.currentTimeMillis();
 		long lastSecond = 0;
+
+		drawCube(15,15,screen);
 
 		while (true) {
 
