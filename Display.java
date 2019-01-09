@@ -30,7 +30,7 @@ public class Display {
 		int currentSticker = 0;
 		for (int i = 0;i < 3;i++) {
 			for (int j = 0;j < 3;j++) {
-				drawSticker(side,currentSticker,startX+(3*j),storeStartY,sceen);
+				drawSticker(side,currentSticker,startX+(3*j),storeStartY,screen);
 				currentSticker++;
 			}
 			storeStartY += 2;
@@ -38,12 +38,12 @@ public class Display {
 	}
 
 	public void drawCube(int startX, int startY,Screen screen){
-		drawSide(3,startX,startY);
-		drawSide(4,startX-9,startY+6);
-		drawSide(0,startX,startY+6);
-		drawSide(2,startX+9,startY+6);
-		drawSide(5,startX+18,startY+6);
-		drawSide(1,startX,startY+12);
+		drawSide(3,startX,startY,screen);
+		drawSide(4,startX-9,startY+6,screen);
+		drawSide(0,startX,startY+6,screen);
+		drawSide(2,startX+9,startY+6,screen);
+		drawSide(5,startX+18,startY+6,screen);
+		drawSide(1,startX,startY+12,screen);
 	}
 
 	public static void main(String[] args) throws IOException {
