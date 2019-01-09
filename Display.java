@@ -1,107 +1,64 @@
-import com.googlecode.lanterna.terminal.Terminal.SGR;
-import com.googlecode.lanterna.TerminalFacade;
-import com.googlecode.lanterna.input.Key;
-import com.googlecode.lanterna.input.Key.Kind;
-import com.googlecode.lanterna.terminal.Terminal;
-import com.googlecode.lanterna.terminal.Terminal.Color;
-import com.googlecode.lanterna.terminal.TerminalSize;
-import com.googlecode.lanterna.LanternaException;
-import com.googlecode.lanterna.input.CharacterPattern;
-import com.googlecode.lanterna.input.InputDecoder;
-import com.googlecode.lanterna.input.InputProvider;
-import com.googlecode.lanterna.input.Key;
-import com.googlecode.lanterna.input.KeyMappingProfile;
+import com.googlecode.lanterna.*;
+import com.googlecode.lanterna.input.*;
+import com.googlecode.lanterna.terminal.*;
+import com.googlecode.lanterna.screen.*;
+import java.io.IOException;
+import java.awt.Color;
 
+/*  Mr. K's TerminalDemo edited for lanterna 3 by Ethan
+*/
 
 public class Display {
 
-	public static void putString(int r, int c,Terminal t, String s){
-		t.moveCursor(r,c);
-		for(int i = 0; i < s.length();i++){
-			t.putCharacter(s.charAt(i));
+	public static void putString(int x, int y, Screen screen, String str) {
+		for (int i = 0; i < str.length(); ++i) {
+			screen.setCharacter(x+i, y, new TextCharacter(str.charAt(i)));
 		}
 	}
-	public static void main(String[] args) {
 
+	public static void main(String[] args) throws IOException {
 
 		int x = 10;
 		int y = 10;
 
-		Terminal terminal = TerminalFacade.createTextTerminal();
-		terminal.enterPrivateMode();
-
-		TerminalSize size = terminal.getTerminalSize();
-		terminal.setCursorVisible(false);
-
-		boolean running = true;
+		Screen screen = new DefaultTerminalFactory().createScreen();
+		screen.startScreen();
 
 		long tStart = System.currentTimeMillis();
 		long lastSecond = 0;
 
-		while(running){
+		while (true) {
 
-			terminal.moveCursor(x,y);
-			terminal.applyBackgroundColor(Terminal.Color.WHITE);
-			terminal.applyForegroundColor(Terminal.Color.BLACK);
-			//applySGR(a,b) for multiple modifiers (bold,blink) etc.
-			//terminal.applySGR(Terminal.SGR.ENTER_UNDERLINE);
-			terminal.putCharacter(' ');
-			//terminal.putCharacter(' ');
-			terminal.applyBackgroundColor(Terminal.Color.DEFAULT);
-			terminal.applyForegroundColor(Terminal.Color.DEFAULT);
-			terminal.applySGR(Terminal.SGR.RESET_ALL);
+			TextCharacter chr = new TextCharacter(
+				'\u263B',
+				new TextColor.RGB((int)(255*Math.random()), (int)(255*Math.random()), (int)(255*Math.random())),
+				TextColor.ANSI.DEFAULT
+			);
+			screen.setCharacter(x, y, chr);
 
+			KeyStroke key = screen.pollInput();
 
-			terminal.moveCursor(size.getColumns()-5,5);
-			terminal.applyBackgroundColor(Terminal.Color.RED);
-			terminal.applyForegroundColor(Terminal.Color.YELLOW);
-			//terminal.applySGR(Terminal.SGR.ENTER_BOLD);
-			terminal.putCharacter(' ');
-			terminal.putCharacter(' ');
-			terminal.putCharacter(' ');
-			terminal.putCharacter(' ');
-			terminal.moveCursor(size.getColumns()-5,6);
-			terminal.putCharacter(' ');
-			terminal.putCharacter(' ');
-			terminal.putCharacter(' ');
-			terminal.putCharacter(' ');
-			terminal.applyBackgroundColor(Terminal.Color.DEFAULT);
-			terminal.applyForegroundColor(Terminal.Color.DEFAULT);
+			if (key != null) {
+				screen.setCharacter(x, y, new TextCharacter(' '));
 
-			Key key = terminal.readInput();
+				if      (key.getKeyType() == KeyType.Escape)     break;
+				else if (key.getKeyType() == KeyType.ArrowLeft)  x--;
+				else if (key.getKeyType() == KeyType.ArrowRight) x++;
+				else if (key.getKeyType() == KeyType.ArrowUp)    y--;
+				else if (key.getKeyType() == KeyType.ArrowDown)  y++;
 
-			if (key != null)
-			{
-
-				if (key.getKind() == Key.Kind.Escape) {
-
-					terminal.exitPrivateMode();
-					running = false;
-				}
-
-				//space moves it diagonally
-				if (key.getCharacter() == ' ') {
-					terminal.moveCursor(x,y);
-					terminal.putCharacter(' ');
-					y++;
-					x++;
-				}
-				putString(1,4,terminal,"["+key.getCharacter() +"]");
-				putString(1,1,terminal,key+"        ");//to clear leftover letters pad withspaces
+				putString(1, 1, screen, key+"                 ");
 			}
-
-			//DO EVEN WHEN NO KEY PRESSED:
 			long tEnd = System.currentTimeMillis();
 			long millis = tEnd - tStart;
-			putString(1,2,terminal,"Milliseconds since start of program: "+millis);
-			if(millis/1000 > lastSecond){
+			putString(1, 2, screen, "Milliseconds since start of program: "+millis);
+			if (millis / 1000 > lastSecond) {
 				lastSecond = millis / 1000;
-				//one second has passed.
-				putString(1,3,terminal,"Seconds since start of program: "+lastSecond);
-
+				putString(1, 3, screen, "Seconds since start of program: "+millis/1000);
 			}
-
-
+			screen.doResizeIfNecessary();
+			screen.refresh();
 		}
+		screen.stopScreen();
 	}
 }
