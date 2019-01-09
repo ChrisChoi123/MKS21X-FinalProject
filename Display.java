@@ -15,35 +15,35 @@ public class Display {
 			screen.setCharacter(x+i, y, new TextCharacter(str.charAt(i)));
 		}
 	}
-	private void drawSticker(int side, int index, int x, int y,Screen screen) {
+	private static void drawSticker(int side, int index, int x, int y,Screen screen,Cube cube) {
 		int storeY = y;
 		for (int i = 0;i < 2;i++) {
 			for (int j = 0; j < 3;j++) {
-				screen.setCharacter(x+j,storeY,drawColor(side,index));
+				screen.setCharacter(x+j,storeY,cube.drawColor(side,index));
 			}
 			storeY++;
 		}
 
 	}
-	private void drawSide(int side,int startX, int startY,Screen screen) {
+	private static void drawSide(int side,int startX, int startY,Screen screen,Cube cube) {
 		int storeStartY = startY;
 		int currentSticker = 0;
 		for (int i = 0;i < 3;i++) {
 			for (int j = 0;j < 3;j++) {
-				drawSticker(side,currentSticker,startX+(3*j),storeStartY,screen);
+				drawSticker(side,currentSticker,startX+(3*j),storeStartY,screen,cube);
 				currentSticker++;
 			}
 			storeStartY += 2;
 		}
 	}
 
-	public void drawCube(int startX, int startY,Screen screen){
-		drawSide(3,startX,startY,screen);
-		drawSide(4,startX-9,startY+6,screen);
-		drawSide(0,startX,startY+6,screen);
-		drawSide(2,startX+9,startY+6,screen);
-		drawSide(5,startX+18,startY+6,screen);
-		drawSide(1,startX,startY+12,screen);
+	public static void drawCube(int startX, int startY,Screen screen,Cube cube){
+		drawSide(3,startX,startY,screen,cube);
+		drawSide(4,startX-9,startY+6,screen,cube);
+		drawSide(0,startX,startY+6,screen,cube);
+		drawSide(2,startX+9,startY+6,screen,cube);
+		drawSide(5,startX+18,startY+6,screen,cube);
+		drawSide(1,startX,startY+12,screen,cube);
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -56,8 +56,8 @@ public class Display {
 
 		long tStart = System.currentTimeMillis();
 		long lastSecond = 0;
-
-		drawCube(15,15,screen);
+		Cube cube = new Cube();
+		drawCube(20,5,screen,cube);
 
 		while (true) {
 
