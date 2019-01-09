@@ -1,3 +1,9 @@
+import com.googlecode.lanterna.*;
+import com.googlecode.lanterna.input.*;
+import com.googlecode.lanterna.terminal.*;
+import com.googlecode.lanterna.screen.*;
+import java.io.IOException;
+import java.awt.Color;
 public class Cube{
   private char[][] data;
   /**Constructs the main cube used for the simulation, in a solved state.
@@ -362,11 +368,38 @@ public class Cube{
       for (int g = 0; g < 9; g++){
         if (color != data[i][g]){
           match = false;
+        }
       }
     }
+    return match;
   }
-  return match;
-}
+
+  private int[] getColor(char letter) {
+    if (letter == 'W') {
+      return new int[] {255,255,255};
+    }
+    else if (letter == 'G') {
+      return new int[] {0,255,0};
+    }
+    else if (letter == 'R') {
+      return new int[] {255,0,0};
+    }else if (letter == 'B') {
+      return new int[] {0,0,255};
+    }else if (letter == 'O') {
+      return new int[] {255,140,0};
+    }else {
+      return new int[] {255,255,0};
+    }
+  }
+  public TextCharacter drawSticker(int side, int index) {
+    int[] RGBValues = getColor(data[side][index]);
+    TextCharacter sticker = new TextCharacter(
+      ' ',
+      TextColor.ANSI.DEFAULT,
+      new TextColor.RGB(RGBValues[0],RGBValues[1],RGBValues[2])
+    );
+    return sticker;
+  }
 
   /**Used for testing the functionality of methods at certain points.
     *
