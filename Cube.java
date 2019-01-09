@@ -4,6 +4,8 @@ import com.googlecode.lanterna.terminal.*;
 import com.googlecode.lanterna.screen.*;
 import java.io.IOException;
 import java.awt.Color;
+import java.util.*; //random, scanner, arraylist
+import java.lang.Math;
 public class Cube{
   private char[][] data;
   /**Constructs the main cube used for the simulation, in a solved state.
@@ -11,6 +13,7 @@ public class Cube{
     *of the standard Rubik's Cube, White, Green, Red, Blue, Orange, Yellow.
     *Order of the chars are mostly abitrary.
     */
+
   public Cube(){
     data = new char[6][9];
     reset();
@@ -391,14 +394,41 @@ public class Cube{
       return new int[] {255,255,0};
     }
   }
-  public TextCharacter drawSticker(int side, int index) {
+  public TextCharacter drawColor(int side, int index) {
     int[] RGBValues = getColor(data[side][index]);
     TextCharacter sticker = new TextCharacter(
       ' ',
-      TextColor.ANSI.DEFAULT,
+      new TextColor.RGB(0,0,0),
       new TextColor.RGB(RGBValues[0],RGBValues[1],RGBValues[2])
     );
     return sticker;
+  }
+
+  public static String generateScramble(int length) {
+    String output = "";
+    String[] moves = new String[] {"U", "F", "R", "B", "L", "D"};
+    String prevMove = "";
+    for (int i = 0; i < length;i++) {
+      String moveToAdd = moves[(int)(Math.random()*6)];
+      if (i > 0) {
+        while (moveToAdd.equals(prevMove)) {
+          moveToAdd = moves[(int)(Math.random()*6)];
+        }
+      }
+      prevMove = moveToAdd;
+      output += moveToAdd;
+      int randValue = (int)(Math.random()*3);
+      if (randValue == 1) {
+        output += "'";
+      }
+      else if (randValue == 2) {
+        output += "2";
+      }
+      if (i < length-1) {
+        output += " ";
+      }
+    }
+    return output;
   }
 
   /**Used for testing the functionality of methods at certain points.
@@ -406,16 +436,11 @@ public class Cube{
     */
   public static void main(String args[]){
     Cube c1 = new Cube();
-    String scramble = "F' L2 D2 R B2 L2 U2 R U2 R F2 R2 B2 D' B2 L F' R2 D L U";
+    String scramble = generateScramble(30);
+    System.out.println(scramble);
     c1.performMoveSet(scramble);
     c1.performMove("x");
     System.out.println(c1);
     System.out.println(c1.isSolved());
-
-    Cube c2 = new Cube();
-    String scramble1 = "M U' M' U2 M U M U M2 U M'";
-    c2.performMoveSet(scramble1);
-    c2.performMove("x");
-    System.out.println(c2);
   }
 }
