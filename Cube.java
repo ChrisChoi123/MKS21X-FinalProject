@@ -432,9 +432,9 @@ public class Cube{
   }
 
   /**Generates a sequence of randomly generated moves. Only uses the standard 6
-    *rotations of the puzzle: U,D,R,L,F, and B, because it is standard conventions
-    *in the cubing community, and those moves alone are enough to reach every
-    *state of the puzzle.
+    *rotations of the puzzle: U,D,R,L,F, and B, because those moves alone are enough to reach every
+    *state of the puzzle. The method gets rid of consecutive moves that have the same letter,
+    *like "D D2" or "F2 F'" because they are redundent and can be simplified. 
     *
     *@param length is the amount of moves in the scramble the method should generate
     *@return the String containing all of the generated moves, seperated by spaces
