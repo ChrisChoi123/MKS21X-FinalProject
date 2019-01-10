@@ -85,6 +85,14 @@ public class Display {
 		drawSide(1,startX,startY+12,screen,cube);
 	}
 
+	public static void changeCube(KeyStroke key, Screen screen, Cube cube){
+		String keyString = ""+key;
+		String toMove = ""+keyString.charAt(keyString.length()-3);
+		cube.performMove(toMove);
+	}
+
+
+
 	/**Creates an interactive Screen that allows the user to interact with a
 		*simulation of a Rubik's Cube. The user may turn different sides,
 		*scramble the cube, customize the puzzle to their liking, and time their
@@ -111,22 +119,17 @@ public class Display {
 		Cube cube = new Cube();
 		String scramble = cube.generateScramble(20);
 		cube.performMoveSet(scramble);
-		cube.performMove("x");
 		drawCube(25,5,screen,cube);
 		putString(2,0,screen,scramble);
 		while (true) {
 			KeyStroke key = screen.pollInput();
 
 			if (key != null) {
-				screen.setCharacter(x, y, new TextCharacter(' '));
-
 				if      (key.getKeyType() == KeyType.Escape)     break;
-				else if (key.getKeyType() == KeyType.ArrowLeft)  x--;
-				else if (key.getKeyType() == KeyType.ArrowRight) x++;
-				else if (key.getKeyType() == KeyType.ArrowUp)    y--;
-				else if (key.getKeyType() == KeyType.ArrowDown)  y++;
-
-				putString(1, 1, screen, key+"                 ");
+				else if (key.getKeyType() == KeyType.Character) {
+					changeCube(key,screen,cube);
+					drawCube(25,5,screen,cube);
+				}
 			}
 			long tEnd = System.currentTimeMillis();
 			long millis = tEnd - tStart;
