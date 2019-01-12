@@ -90,9 +90,9 @@ public class Display {
 	int startY = startingPositions[1];
 			drawSide(3,startX,startY, size,screen,cube);
 			drawSide(4,startX-3*length,startY+3*height,size,screen,cube);
-			drawSide(0,startX,startY+6,size,screen,cube);
-			drawSide(2,startX-3*length,startY+3*height,size,screen,cube);
-			drawSide(5,startX-6*length,startY+3*height,size,screen,cube);
+			drawSide(0,startX,startY+3*height,size,screen,cube);
+			drawSide(2,startX+3*length,startY+3*height,size,screen,cube);
+			drawSide(5,startX+6*length,startY+3*height,size,screen,cube);
 			drawSide(1,startX,startY+6*height,size,screen,cube);
 		}
 
