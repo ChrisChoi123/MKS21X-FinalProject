@@ -207,21 +207,21 @@ int sizeOfRLSpace = (col - (3*sizes[0]*4)) / 2;
 						String[] validMoves = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
 						for (int i = 0;i<validMoves.length;i++) {
       				if (keyStringo.equals(validMoves[i])) {
-		           userMoves.add(keyString);
+		           userMoves.add(keyStringo);
 		           changeCube(key,screen,cube);
 		           drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
-           		break;
       		}
 					}
 				}
 
 					else if (key.getKeyType() == KeyType.Backspace) {
-						if (userMoves.size() > 0) {
-for (int i = 0;i<3;i++ ) {
+						int tempSize = userMoves.size();
+						if (tempSize > 0) {
+for (int i = 0; i < 3;i++) {
 							cube.performMove(userMoves.get(userMoves.size()-1));
 	}
 						userMoves.remove(userMoves.size()-1);
-drawCube(screen,cube,getSize(screen) , getStartingPositions((screen),getSize(screen)));
+						drawCube(screen,cube,getSize(screen) , getStartingPositions((screen),getSize(screen)));
 	}
 }
 				else if (key.getKeyType() == KeyType.Enter) {
