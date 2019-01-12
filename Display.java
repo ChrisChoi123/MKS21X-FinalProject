@@ -99,20 +99,6 @@ public class Display {
 		drawSide(1,startX,startY+6*height,size,screen,cube);
 	}
 
-	/**Recieves a key,extracts the move from it, and performs the move on the cube
-		*
-		*@param key is KeyStroke class that stores the information about the user's
-		*key press during the program.
-		*@param screen is the screen the user is interacting with
-		*@param cube is the Cube that the method is performing the smove on
-		*
-		*/
-	public static void changeCube(KeyStroke key, Screen screen, Cube cube){
-		String keyString = ""+key;
-		String toMove = ""+keyString.charAt(keyString.length()-3);
-		cube.performMove(toMove);
-	}
-
 	/**Given a screen, the method calculates its dimensions, and, depending on the
 		*range of the screen's width, returns the appropriate dimensions of a
 		*sticker that produces a cube that fits on the screen. Since each cell of the
@@ -197,8 +183,6 @@ public class Display {
 		*
 		*/
 	public static void main(String[] args) throws IOException {
-		int x = 10;
-		int y = 10;
 		Screen screen = new DefaultTerminalFactory().createScreen();
 		screen.startScreen();
 		/**Starts a timer of the time the program has gone on for
@@ -209,10 +193,13 @@ public class Display {
 		  */
 		Cube cube = new Cube();
 		drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
+		String scramble = "";
 
 		TerminalSize originalSize = screen.getTerminalSize();
-		putString(0,1,screen,""+originalSize);
 		ArrayList<String> userMoves = new ArrayList<String>();
+
+		/**while program is running. stops running when escape is pressed
+		  */
 		while (true) {
 			KeyStroke key = screen.pollInput();
 			String keyString = "" + key;
@@ -220,18 +207,18 @@ public class Display {
 			if (currentSize != originalSize) {
 				screen.clear();
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
-				putString(1,0,screen,""+currentSize);
 				originalSize = currentSize;
+				putString(0,0,screen,"Scramble: "+scramble);
 			}
 			if (key != null) {
 				if (key.getKeyType() == KeyType.Escape) break;
 				else if (key.getKeyType() == KeyType.Character) {
-					String keyStringo = ""+keyString.charAt(keyString.length()-3);
+					String letterPressed = ""+keyString.charAt(keyString.length()-3);
 					String[] validMoves = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
 					for (int i = 0;i<validMoves.length;i++) {
-	    			if (keyStringo.equals(validMoves[i])) {
-		          userMoves.add(keyStringo);
-		          changeCube(key,screen,cube);
+	    			if (letterPressed.equals(validMoves[i])) {
+		          userMoves.add(letterPressed);
+		          cube.performMove(letterPressed);
 	     			}
 					}
 				}
@@ -247,22 +234,25 @@ public class Display {
 				else if (key.getKeyType() == KeyType.Enter) {
 					userMoves.clear();
 					cube.reset();
+					screen.clear();
+					putString(0,0,screen,"Scramble: ");
 				}
 				else if (key.getKeyType() == KeyType.Tab) {
-					String scramble = cube.generateScramble(20);
+					scramble = cube.generateScramble(20);
+					cube.reset();
 					cube.performMoveSet(scramble);
 					userMoves.clear();
 					screen.clear();
-					putString(0,1,screen,scramble);
+					putString(0,0,screen,"Scramble: "+scramble);
 				}
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
 			}
 			long tEnd = System.currentTimeMillis();
 			long millis = tEnd - tStart;
-			putString(1, 2, screen, "Milliseconds since start of program: "+millis);
+			//putString(1, 2, screen, "Milliseconds since start of program: "+millis);
 			if (millis / 1000 > lastSecond) {
 				lastSecond = millis / 1000;
-				putString(1, 3, screen, "Seconds since start of program: "+millis/1000);
+				//putString(1, 3, screen, "Seconds since start of program: "+millis/1000);
 			}
 			screen.doResizeIfNecessary();
 			screen.refresh();
