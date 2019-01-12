@@ -121,11 +121,16 @@ public class Display {
 		cube.performMoveSet(scramble);
 		drawCube(25,5,screen,cube);
 		putString(2,0,screen,scramble);
+		TerminalSize originalSize = screen.getTerminalSize();
+		putString(0,20,screen,""+originalSize);
 		while (true) {
 			KeyStroke key = screen.pollInput();
-
+			TerminalSize currentSize = screen.getTerminalSize();
+			if (currentSize != originalSize) {
+				putString(0,20,screen,currentSize);
+			}
 			if (key != null) {
-				if      (key.getKeyType() == KeyType.Escape)     break;
+				if (key.getKeyType() == KeyType.Escape) break;
 				else if (key.getKeyType() == KeyType.Character) {
 					changeCube(key,screen,cube);
 					drawCube(25,5,screen,cube);
