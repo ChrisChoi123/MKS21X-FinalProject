@@ -5,6 +5,7 @@ import com.googlecode.lanterna.screen.*;
 import java.io.IOException;
 import java.awt.Color;
 import java.lang.Math;
+import java.util.ArrayList;
 
 /*  Mr. K's TerminalDemo edited for lanterna 3
  */
@@ -164,56 +165,71 @@ int sizeOfRLSpace = (col - (3*sizes[0]*4)) / 2;
 		*@param args is the array of the user's inputs
 		*
 		*/
-	public static void main(String[] args) throws IOException {
+		public static void main(String[] args) throws IOException {
 
-		int x = 10;
-		int y = 10;
+			int x = 10;
+			int y = 10;
 
-		Screen screen = new DefaultTerminalFactory().createScreen();
-		screen.startScreen();
+			Screen screen = new DefaultTerminalFactory().createScreen();
+			screen.startScreen();
 
-		/**Starts a timer of the time the program has gone on for
-		  */
-		long tStart = System.currentTimeMillis();
-		long lastSecond = 0;
+			/**Starts a timer of the time the program has gone on for
+			  */
+			long tStart = System.currentTimeMillis();
+			long lastSecond = 0;
 
-		/**Creates a cube to be simulated
-		  */
-		Cube cube = new Cube();
-		String scramble = cube.generateScramble(20);
-		cube.performMoveSet(scramble);
-		drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
-		putString(2,0,screen,scramble);
-		TerminalSize originalSize = screen.getTerminalSize();
-		putString(0,1,screen,""+originalSize);
-		while (true) {
-			KeyStroke key = screen.pollInput();
-			TerminalSize currentSize = screen.getTerminalSize();
+			/**Creates a cube to be simulated
+			  */
+			Cube cube = new Cube();
+			String scramble = cube.generateScramble(20);
+			cube.performMoveSet(scramble);
+			drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
+			putString(2,0,screen,scramble);
+			TerminalSize originalSize = screen.getTerminalSize();
+			putString(0,1,screen,""+originalSize);
+			ArrayList<String> userMoves = new ArrayList<String>();
+			while (true) {
+				KeyStroke key = screen.pollInput();
+				String keyString = "" + key;
+				TerminalSize currentSize = screen.getTerminalSize();
 
-			if (currentSize != originalSize) {
-				screen.clear();
-				drawCube(screen, cube, getSize(screen), getStartingPositions((screen),getSize(screen)));
-				putString(1,0,screen,""+currentSize);
-				originalSize = currentSize;
-			}
-
-			if (key != null) {
-				if (key.getKeyType() == KeyType.Escape) break;
-				else if (key.getKeyType() == KeyType.Character) {
-					changeCube(key,screen,cube);
-					drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
+				if (currentSize != originalSize) {
+					screen.clear();
+					drawCube(screen, cube, getSize(screen), getStartingPositions((screen),getSize(screen)));
+					putString(1,0,screen,""+currentSize);
+					originalSize = currentSize;
 				}
-			}
-			long tEnd = System.currentTimeMillis();
-			long millis = tEnd - tStart;
-			putString(1, 2, screen, "Milliseconds since start of program: "+millis);
-			if (millis / 1000 > lastSecond) {
-				lastSecond = millis / 1000;
-				putString(1, 3, screen, "Seconds since start of program: "+millis/1000);
-			}
-			screen.doResizeIfNecessary();
-			screen.refresh();
-		}
-		screen.stopScreen();
+
+				if (key != null) {
+					if (key.getKeyType() == KeyType.Escape) break;
+					else if (key.getKeyType() == KeyType.Character) {
+						userMoves.add(""+keyString.charAt(keyString.length()-3));
+						changeCube(key,screen,cube);
+						drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
+					}
+					else if (key.getKeyType() == KeyType.Backspace) {
+						if (userMoves.size() > 0) {
+for (int i = 0;i<3;i++ ) {
+							cube.performMove(userMoves.get(userMoves.size()-1));
+	}
+						userMoves.remove(userMoves.size()-1);
+drawCube(screen,cube,getSize(screen) , getStartingPositions((screen),getSize(screen)));
 	}
 }
+			//		else if (key.getKeyType() == KeyType.) {
+					//	cube.reset();
+
+				}
+				long tEnd = System.currentTimeMillis();
+				long millis = tEnd - tStart;
+				putString(1, 2, screen, "Milliseconds since start of program: "+millis);
+				if (millis / 1000 > lastSecond) {
+					lastSecond = millis / 1000;
+					putString(1, 3, screen, "Seconds since start of program: "+millis/1000);
+				}
+				screen.doResizeIfNecessary();
+				screen.refresh();
+			}
+			screen.stopScreen();
+		}
+	}
