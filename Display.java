@@ -93,43 +93,54 @@ public class Display {
 	}
 
 	private static int[] giveSize(TerminalSize dimensions) {
-	int row = dimensions.getRows();
-	int col = dimensions.getColumns();
-	int[] sizes = new int[] {1,1};
-	if (row < 36) {
-		sizes[0] = 1;
-		sizes[1] = 1;
- 	}
-	else if (row >= 36 && row < 72) {
-		sizes[0] = 2;
-		sizes[1] = 1;
+		int row = dimensions.getRows();
+		int col = dimensions.getColumns();
+		int[] sizes = new int[] {1,1};
+		if (row < 36) {
+			sizes[0] = 1;
+			sizes[1] = 1;
+	 	}
+		else if (row >= 36 && row < 72) {
+			sizes[0] = 2;
+			sizes[1] = 1;
+		}
+		else if (row >= 72 && row < 108) {
+			sizes[0] = 4;
+			sizes[1] = 2;
+		}
+		else if (row >= 108 && row < 144) {
+			sizes[0] = 6;
+			sizes[1] = 3;
+		}
+		else if (row >= 144 && row < 162) {
+			sizes[0] = 8;
+			sizes[1] = 4;
+		}
+		else if (row >= 162 && row < 198) {
+			sizes[0] = 9;
+			sizes[1] = 5;
+		}
+		else if (row >= 198 && row < 234) {
+			sizes[0] = 11;
+			sizes[1] = 6;
+		}
+		else if (row >= 234) {
+			sizes[0] = 13;
+			sizes[1] = 7;
+		}
+		return sizes;
 	}
-	else if (row >= 72 && row < 108) {
-		sizes[0] = 4;
-		sizes[1] = 2;
+
+	public static int[] getStartingPositions(TerminalSize dimensions, Screen screen, int[] sizes){
+		int row = dimensions.getRows();
+		int col = dimensions.getColumns();
+		int[] positions = new int[2];		
+		int sizeOfRLSpace = (col - (3*sizes[0]*4)) / 2;
+		int sizeOfUDSpace = (row - (3*sizes[1]*3)) / 2;
+		positions[0] = 3*sizes[0] + sizeOfRLSpace;
+		positions[1] = sizeOfUDSpace;
+		return positions;
 	}
-	else if (row >= 108 && row < 144) {
-		sizes[0] = 6;
-		sizes[1] = 3;
-	}
-	else if (row >= 144 && row < 162) {
-		sizes[0] = 8;
-		sizes[1] = 4;
-	}
-	else if (row >= 162 && row < 198) {
-		sizes[0] = 9;
-		sizes[1] = 5;
-	}
-	else if (row >= 198 && row < 234) {
-		sizes[0] = 11;
-		sizes[1] = 6;
-	}
-	else if (row >= 234) {
-		sizes[0] = 13;
-		sizes[1] = 7;
-	}
-	return sizes;	
-}
 
 	public static void resizeCube(TerminalSize dimensions,Screen screen){
 		int row = dimensions.getRows();
