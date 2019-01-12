@@ -229,6 +229,15 @@ drawCube(screen,cube,getSize(screen) , getStartingPositions((screen),getSize(scr
 					cube.reset();
 					drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
 				}
+
+				else if (key.getKeyType() == KeyType.Tab) {
+					scramble = cube.generateScramble(25);
+					cube.performMoveSet(scramble);
+					userMoves.clear();
+					screen.clear();
+					drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
+					putString(0,1,screen,scramble);
+				}
 			}
 				long tEnd = System.currentTimeMillis();
 				long millis = tEnd - tStart;
