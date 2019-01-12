@@ -203,10 +203,18 @@ int sizeOfRLSpace = (col - (3*sizes[0]*4)) / 2;
 				if (key != null) {
 					if (key.getKeyType() == KeyType.Escape) break;
 					else if (key.getKeyType() == KeyType.Character) {
-						userMoves.add(""+keyString.charAt(keyString.length()-3));
-						changeCube(key,screen,cube);
-						drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
+						String keyStringo = ""+keyString.charAt(keyString.length()-3);
+						String[] validMoves = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
+						for (int i = 0;i<validMoves.length;i++) {
+      				if (keyStringo.equals(validMoves[i])) {
+		           userMoves.add(keyString);
+		           changeCube(key,screen,cube);
+		           drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
+           		break;
+      		}
 					}
+				}
+
 					else if (key.getKeyType() == KeyType.Backspace) {
 						if (userMoves.size() > 0) {
 for (int i = 0;i<3;i++ ) {
@@ -216,10 +224,12 @@ for (int i = 0;i<3;i++ ) {
 drawCube(screen,cube,getSize(screen) , getStartingPositions((screen),getSize(screen)));
 	}
 }
-			//		else if (key.getKeyType() == KeyType.) {
-					//	cube.reset();
-
+				else if (key.getKeyType() == KeyType.Enter) {
+					userMoves.clear();
+					cube.reset();
+					drawCube(screen,cube,getSize(screen), getStartingPositions((screen),getSize(screen)));
 				}
+			}
 				long tEnd = System.currentTimeMillis();
 				long millis = tEnd - tStart;
 				putString(1, 2, screen, "Milliseconds since start of program: "+millis);
