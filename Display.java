@@ -4,6 +4,7 @@ import com.googlecode.lanterna.terminal.*;
 import com.googlecode.lanterna.screen.*;
 import java.io.IOException;
 import java.awt.Color;
+import java.lang.Math;
 
 /*  Mr. K's TerminalDemo edited for lanterna 3
  */
@@ -91,7 +92,55 @@ public class Display {
 		cube.performMove(toMove);
 	}
 
+	private static int[] giveSize(TerminalSize dimensions) {
+	int row = dimensions.getRows();
+	int col = dimensions.getColumns();
+	int[] sizes = new int[] {1,1};
+	if (row < 36) {
+		sizes[0] = 1;
+		sizes[1] = 1;
+ 	}
+	else if (row >= 36 && row < 72) {
+		sizes[0] = 2;
+		sizes[1] = 1;
+	}
+	else if (row >= 72 && row < 108) {
+		sizes[0] = 4;
+		sizes[1] = 2;
+	}
+	else if (row >= 108 && row < 144) {
+		sizes[0] = 6;
+		sizes[1] = 3;
+	}
+	else if (row >= 144 && row < 162) {
+		sizes[0] = 8;
+		sizes[1] = 4;
+	}
+	else if (row >= 162 && row < 198) {
+		sizes[0] = 9;
+		sizes[1] = 5;
+	}
+	else if (row >= 198 && row < 234) {
+		sizes[0] = 11;
+		sizes[1] = 6;
+	}
+	else if (row >= 234) {
+		sizes[0] = 13;
+		sizes[1] = 7;
+	}
+	return sizes;	
+}
 
+	public static void resizeCube(TerminalSize dimensions,Screen screen){
+		int row = dimensions.getRows();
+		int col = dimensions.getColumns();
+		String errorMessage = "Resize screen";
+		if (row < 12 || col < 9) {
+			for (int i = 0; i < errorMessage.length(); ++i) {
+				screen.setCharacter(0+i,4,new TextCharacter(errorMessage.charAt(i)));
+			}
+		}
+	}
 
 	/**Creates an interactive Screen that allows the user to interact with a
 		*simulation of a Rubik's Cube. The user may turn different sides,
@@ -122,13 +171,16 @@ public class Display {
 		drawCube(25,5,screen,cube);
 		putString(2,0,screen,scramble);
 		TerminalSize originalSize = screen.getTerminalSize();
-		putString(0,20,screen,""+originalSize);
+		putString(0,1,screen,""+originalSize);
 		while (true) {
 			KeyStroke key = screen.pollInput();
 			TerminalSize currentSize = screen.getTerminalSize();
+
 			if (currentSize != originalSize) {
-				putString(0,20,screen,currentSize);
+				resizeCube(currentSize,screen);
+				putString(1,0,screen,""+currentSize);
 			}
+
 			if (key != null) {
 				if (key.getKeyType() == KeyType.Escape) break;
 				else if (key.getKeyType() == KeyType.Character) {
