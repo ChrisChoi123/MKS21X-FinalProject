@@ -198,6 +198,11 @@ public class Display {
 		TerminalSize originalSize = screen.getTerminalSize();
 		ArrayList<String> userMoves = new ArrayList<String>();
 
+		long timer = 0;
+		long lastTime = System.currentTimeMillis();
+		long currentTime = lastTime;
+		boolean firstMove = false;
+
 		/**while program is running. stops running when escape is pressed
 		  */
 		while (true) {
@@ -210,11 +215,18 @@ public class Display {
 				originalSize = currentSize;
 				putString(0,0,screen,"Scramble: "+scramble);
 			}
+
+
 			if (key != null) {
+
 				if (key.getKeyType() == KeyType.Escape) break;
 				else if (key.getKeyType() == KeyType.Character) {
 					String letterPressed = ""+keyString.charAt(keyString.length()-3);
 					String[] validMoves = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
+					if (validMoves.contains(letterPressed)&& userMoves.size() == 0){
+						firstMove = true;
+					}
+
 					for (int i = 0;i<validMoves.length;i++) {
 	    			if (letterPressed.equals(validMoves[i])) {
 		          userMoves.add(letterPressed);
@@ -222,6 +234,7 @@ public class Display {
 	     			}
 					}
 				}
+
 				else if (key.getKeyType() == KeyType.Backspace) {
 					int tempSize = userMoves.size();
 					if (tempSize > 0) {
@@ -236,6 +249,7 @@ public class Display {
 					cube.reset();
 					screen.clear();
 					putString(0,0,screen,"Scramble: ");
+					firstMove = false;
 				}
 				else if (key.getKeyType() == KeyType.Tab) {
 					scramble = cube.generateScramble(20);
@@ -244,9 +258,21 @@ public class Display {
 					userMoves.clear();
 					screen.clear();
 					putString(0,0,screen,"Scramble: "+scramble);
+					firstMove = false;
 				}
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
 			}
+
+			while (firstMove){
+				lastTime = currentTime;
+        currentTime = System.currentTimeMillis();
+        timer += (currentTime -lastTime);//add the amount of time since the last frame.
+        //DO GAME STUFF HERE
+        putString(1,3,terminal, "Game here...",Terminal.Color.WHITE,Terminal.Color.RED);
+        putString(3,5,terminal, "Time: "+timer,Terminal.Color.WHITE,Terminal.Color.RED);
+			}
+
+
 			long tEnd = System.currentTimeMillis();
 			long millis = tEnd - tStart;
 			//putString(1, 2, screen, "Milliseconds since start of program: "+millis);
