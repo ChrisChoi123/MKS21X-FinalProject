@@ -199,9 +199,10 @@ public class Display {
 		ArrayList<String> userMoves = new ArrayList<String>();
 
 		long timer = 0;
-		long lastTime = System.currentTimeMillis();
-		long currentTime = lastTime;
+		long lastTime = 0;
+		long currentTime = 0;
 		boolean firstMove = false;
+		boolean firstReset = false;
 
 		/**while program is running. stops running when escape is pressed
 		  */
@@ -227,11 +228,11 @@ public class Display {
 					for (int i = 0;i < validMoves.length;i++) {
 						if (letterPressed.equals(validMoves[i])) {
 							letterIsValid = true;
-							break;
 						}
 					}
-					if (letterIsValid && userMoves.size() == 0) {
+					if (!firstReset && letterIsValid && userMoves.size() == 0) {
 						firstMove = true;
+						lastTime = System.currentTimeMillis() / 1000;
 					}
 
 					for (int i = 0;i<validMoves.length;i++) {
@@ -240,6 +241,7 @@ public class Display {
 		          cube.performMove(letterPressed);
 	     			}
 					}
+					firstReset = true;
 				}
 
 				else if (key.getKeyType() == KeyType.Backspace) {
@@ -257,6 +259,7 @@ public class Display {
 					screen.clear();
 					putString(0,0,screen,"Scramble: ");
 					firstMove = false;
+					firstReset = false;
 				}
 				else if (key.getKeyType() == KeyType.Tab) {
 					scramble = cube.generateScramble(20);
@@ -266,19 +269,19 @@ public class Display {
 					screen.clear();
 					putString(0,0,screen,"Scramble: "+scramble);
 					firstMove = false;
+					firstReset = false;
 				}
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
 			}
 
-			while (firstMove){
-				lastTime = currentTime;
-        currentTime = System.currentTimeMillis();
-        timer += (currentTime -lastTime);//add the amount of time since the last frame.
-        //DO GAME STUFF HERE
-        putString(1,3,terminal, "Game here...",Terminal.Color.WHITE,Terminal.Color.RED);
-        putString(3,5,terminal, "Time: "+timer,Terminal.Color.WHITE,Terminal.Color.RED);
+			if (!firstMove) {
+				timer = 0;
 			}
-
+			if (firstMove){
+				currentTime = System.currentTimeMillis() / 1000;
+        timer = (currentTime - lastTime);//add the amount of time since the last frame.
+        putString(1,3,screen, "Timer: "+ timer);
+			}
 
 			long tEnd = System.currentTimeMillis();
 			long millis = tEnd - tStart;
