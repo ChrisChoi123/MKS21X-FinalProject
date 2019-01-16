@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.awt.Color;
 import java.lang.Math;
 import java.util.ArrayList;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 
 /*  Mr. K's TerminalDemo edited for lanterna 3
  */
@@ -281,6 +283,7 @@ public class Display {
 				}
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
 			}
+			putString(1,5,screen,""+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
 
 			if (!firstMove) {
 				timer = 0;
