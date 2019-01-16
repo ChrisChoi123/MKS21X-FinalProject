@@ -223,7 +223,14 @@ public class Display {
 				else if (key.getKeyType() == KeyType.Character) {
 					String letterPressed = ""+keyString.charAt(keyString.length()-3);
 					String[] validMoves = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
-					if (validMoves.contains(letterPressed)&& userMoves.size() == 0){
+					boolean letterIsValid = false;
+					for (int i = 0;i < validMoves.length;i++) {
+						if (letterPressed.equals(validMoves[i])) {
+							letterIsValid = true;
+							break;
+						}
+					}
+					if (letterIsValid && userMoves.size() == 0) {
 						firstMove = true;
 					}
 
