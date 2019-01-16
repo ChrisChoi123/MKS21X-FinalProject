@@ -222,19 +222,25 @@ public class Display {
 
 				if (key.getKeyType() == KeyType.Escape) break;
 				else if (key.getKeyType() == KeyType.Character) {
+					// stores the String of the key that was pressed
 					String letterPressed = ""+keyString.charAt(keyString.length()-3);
+					// stores the all the valid moves the user can make
 					String[] validMoves = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
 					boolean letterIsValid = false;
+					//checks to see if the move being made is a valid move
 					for (int i = 0;i < validMoves.length;i++) {
 						if (letterPressed.equals(validMoves[i])) {
 							letterIsValid = true;
 						}
 					}
+					//checks to see if it is the first time a move is made from a scrambled or reset position
+					// . if the move being made is valid, and if the size of the amount of moves the
+					// user made is 0
 					if (!firstReset && letterIsValid && userMoves.size() == 0) {
 						firstMove = true;
 						lastTime = System.currentTimeMillis() / 1000;
 					}
-
+					//adds the user move to an array, and then performs the move
 					for (int i = 0;i<validMoves.length;i++) {
 	    			if (letterPressed.equals(validMoves[i])) {
 		          userMoves.add(letterPressed);
@@ -246,6 +252,8 @@ public class Display {
 
 				else if (key.getKeyType() == KeyType.Backspace) {
 					int tempSize = userMoves.size();
+					//performs the last move made by the user 3 times (which is essentially performing the inverse)
+					// and then removes the move from the array once it has been performed
 					if (tempSize > 0) {
 						for (int i = 0; i < 3;i++) {
 							cube.performMove(userMoves.get(userMoves.size()-1));
@@ -277,6 +285,10 @@ public class Display {
 			if (!firstMove) {
 				timer = 0;
 			}
+			//when the first valid move, after the cube has been reset or scrambled,
+			// has been performed, this continuously updates the timer with the
+			//difference between the time when the first move was made, and the
+			//current time (12 PM January 1, 1970 UTC) in seconds.
 			if (firstMove){
 				currentTime = System.currentTimeMillis() / 1000;
         timer = (currentTime - lastTime);//add the amount of time since the last frame.
