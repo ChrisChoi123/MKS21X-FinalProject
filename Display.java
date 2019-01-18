@@ -174,6 +174,73 @@ public class Display {
 		return positions;
 	}
 
+	public static String translateMove(String move) {
+		if (move == "q") {
+			return "D";
+		}
+		else if (move == "w") {
+			return "S";
+		}
+		else if (move == "e") {
+			return "B";
+		}
+		else if (move == "a") {
+			return "B";
+		}
+		else if (move == "s") {
+			return "S";
+		}
+		else if (move == "d") {
+			return "F";
+		}
+		else if (move == "z") {
+			return "F";
+		}
+		else if (move == "x") {
+			return "E";
+		}
+		else if (move == "c") {
+			return "D";
+		}
+		else if (move == "r") {
+			return "D";
+		}
+		else if (move == "f") {
+			return "E";
+		}
+		else if (move == "v") {
+			return "L";
+		}
+		else if (move == "t") {
+			return "L";
+		}
+		else if (move == "g") {
+			return "M";
+		}
+		else if (move == "b") {
+			return "R";
+		}
+		else if (move == "y") {
+			return "R";
+		}
+		else if (move == "h") {
+			return "E";
+		}
+		else if (move == "n") {
+			return "D";
+		}
+		else if (move == "u") {
+			return "R";
+		}
+		else if (move == "j") {
+			return "M";
+		}
+		else if (move == "m") {
+			return "L";
+		}
+
+	}
+
 	/**Creates an interactive Screen that allows the user to interact with a
 		*simulation of a Rubik's Cube. The user may turn different sides,
 		*scramble the cube, reset the cube, customize the puzzle to their liking, and time their
@@ -205,6 +272,8 @@ public class Display {
 		long currentTime = 0;
 		boolean firstMove = false;
 		boolean firstReset = false;
+		int mode = 0;
+
 
 		/**while program is running. stops running when escape is pressed
 		  */
@@ -215,7 +284,8 @@ public class Display {
 			if (currentSize != originalSize) {
 				screen.clear();
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
-				originalSize = currentSize;
+				originalSize = cputString(1,5,screen,"Caps lock is on"+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
+urrentSize;
 				putString(0,0,screen,"Scramble: "+scramble);
 			}
 
@@ -229,6 +299,12 @@ public class Display {
 					// stores the all the valid moves the user can make
 					String[] validMoves = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
 					boolean letterIsValid = false;
+					if (letterPressed == 0) {
+						mode = 0;
+					}
+					if (letterPressed == 1) {
+						mode = 1;
+					}
 					//checks to see if the move being made is a valid move
 					for (int i = 0;i < validMoves.length;i++) {
 						if (letterPressed.equals(validMoves[i])) {
@@ -250,6 +326,7 @@ public class Display {
 	     			}
 					}
 					firstReset = true;
+
 				}
 
 				else if (key.getKeyType() == KeyType.Backspace) {
@@ -283,7 +360,7 @@ public class Display {
 				}
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
 			}
-			putString(1,5,screen,""+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
+			putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
 
 			if (!firstMove) {
 				timer = 0;
