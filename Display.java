@@ -181,7 +181,7 @@ public class Display {
 		else if (move == "w") {
 			return "S";
 		}
-		else if (move == "e") {
+		else if (move == "e") {q
 			return "B";
 		}
 		else if (move == "a") {
@@ -195,7 +195,7 @@ public class Display {
 		}
 		else if (move == "z") {
 			return "F";
-		}
+		}q
 		else if (move == "x") {
 			return "E";
 		}
@@ -259,7 +259,7 @@ public class Display {
 		long tStart = System.currentTimeMillis();
 		long lastSecond = 0;
 		/**Creates a cube to be simulated, and draws it on the screen
-		  */
+		  */q
 		Cube cube = new Cube();
 		drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
 		String scramble = "";
@@ -297,7 +297,8 @@ urrentSize;
 					// stores the String of the key that was pressed
 					String letterPressed = ""+keyString.charAt(keyString.length()-3);
 					// stores the all the valid moves the user can make
-					String[] validMoves = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
+					String[] validMoves0 = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
+					String[] validMoves1 = new String[] {"q","a","z","w","s","x","e","d","c","r","f","v","t","g","b","y","h","n","u","j","m"};
 					boolean letterIsValid = false;
 					if (letterPressed == 0) {
 						mode = 0;
