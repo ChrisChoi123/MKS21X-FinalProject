@@ -174,69 +174,72 @@ public class Display {
 		return positions;
 	}
 
-	public static String translateMove(String move) {
-		if (move == "q") {
+	public static String convertMove(String move) {
+		if (move.equals("q")) {
 			return "D";
 		}
-		else if (move == "w") {
-			return "S";
+		else if (move.equals("w")) {
+			return "E";
 		}
-		else if (move == "e") {q
+		else if (move.equals("e")) {
+			return "U";
+		}
+		else if (move.equals("a")) {
 			return "B";
 		}
-		else if (move == "a") {
-			return "B";
-		}
-		else if (move == "s") {
+		else if (move.equals("s")) {
 			return "S";
 		}
-		else if (move == "d") {
+		else if (move.equals("d")) {
 			return "F";
 		}
-		else if (move == "z") {
-			return "F";
-		}q
-		else if (move == "x") {
+		else if (move.equals("z")) {
+			return "U";
+		}
+		else if (move.equals("x")) {
 			return "E";
 		}
-		else if (move == "c") {
+		else if (move.equals("c")) {
 			return "D";
 		}
-		else if (move == "r") {
+		else if (move.equals("r")) {
 			return "D";
 		}
-		else if (move == "f") {
+		else if (move.equals("f")) {
 			return "E";
 		}
-		else if (move == "v") {
+		else if (move.equals("v")) {
+			return "U";
+		}
+		else if (move.equals("t")) {
 			return "L";
 		}
-		else if (move == "t") {
-			return "L";
-		}
-		else if (move == "g") {
+		else if (move.equals("g")) {
 			return "M";
 		}
-		else if (move == "b") {
+		else if (move.equals("b")) {
 			return "R";
 		}
-		else if (move == "y") {
-			return "R";
+		else if (move.equals("y")) {
+			return "U";
 		}
-		else if (move == "h") {
+		else if (move.equals("h")) {
 			return "E";
 		}
-		else if (move == "n") {
+		else if (move.equals("n")) {
 			return "D";
 		}
-		else if (move == "u") {
+		else if (move.equals("u")) {
 			return "R";
 		}
-		else if (move == "j") {
+		else if (move.equals("j")) {
 			return "M";
 		}
-		else if (move == "m") {
+		else if (move.equals("m")) {
 			return "L";
+		}
+		else {
+			return "";
 		}
 
 	}
@@ -259,7 +262,7 @@ public class Display {
 		long tStart = System.currentTimeMillis();
 		long lastSecond = 0;
 		/**Creates a cube to be simulated, and draws it on the screen
-		  */q
+		  */
 		Cube cube = new Cube();
 		drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
 		String scramble = "";
@@ -284,9 +287,10 @@ public class Display {
 			if (currentSize != originalSize) {
 				screen.clear();
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
-				originalSize = cputString(1,5,screen,"Caps lock is on"+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
-urrentSize;
+				originalSize = currentSize;
 				putString(0,0,screen,"Scramble: "+scramble);
+				putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)+"   ");
+				putString(1,7,screen,"Mode: "+mode);
 			}
 
 
@@ -300,16 +304,27 @@ urrentSize;
 					String[] validMoves0 = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
 					String[] validMoves1 = new String[] {"q","a","z","w","s","x","e","d","c","r","f","v","t","g","b","y","h","n","u","j","m"};
 					boolean letterIsValid = false;
-					if (letterPressed == 0) {
+					if (letterPressed.equals("0")) {
 						mode = 0;
+						putString(1,5,screen,"Mode: "+mode);
 					}
-					if (letterPressed == 1) {
+					else if (letterPressed.equals("1")) {
 						mode = 1;
+						putString(1,5,screen,"Mode: "+mode);
 					}
 					//checks to see if the move being made is a valid move
-					for (int i = 0;i < validMoves.length;i++) {
-						if (letterPressed.equals(validMoves[i])) {
-							letterIsValid = true;
+					if (mode == 0) {
+						for (int i = 0;i < validMoves0.length;i++) {
+							if (letterPressed.equals(validMoves1[i])) {
+								letterIsValid = true;
+							}
+						}
+					}
+					else if (mode == 1) {
+						for (int i = 0;i < validMoves1.length;i++) {
+							if (letterPressed.equals(validMoves1[i])) {
+								letterIsValid = true;
+							}
 						}
 					}
 					//checks to see if it is the first time a move is made from a scrambled or reset position
@@ -320,11 +335,21 @@ urrentSize;
 						lastTime = System.currentTimeMillis() / 1000;
 					}
 					//adds the user move to an array, and then performs the move
-					for (int i = 0;i<validMoves.length;i++) {
-	    			if (letterPressed.equals(validMoves[i])) {
-		          userMoves.add(letterPressed);
-		          cube.performMove(letterPressed);
-	     			}
+					if (mode == 0) {
+						for (int i = 0;i<validMoves0.length;i++) {
+							if (letterPressed.equals(validMoves0[i])) {
+								userMoves.add(letterPressed);
+								cube.performMove(letterPressed);
+							}
+						}
+					}
+					else if (mode == 1)	{
+						for (int i = 0;i<validMoves1.length;i++) {
+							if (letterPressed.equals(validMoves1[i])) {
+								userMoves.add(convertMove(letterPressed));
+								cube.performMove(convertMove(letterPressed));
+							}
+						}
 					}
 					firstReset = true;
 
@@ -361,7 +386,8 @@ urrentSize;
 				}
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
 			}
-			putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
+			putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)+"   ");
+			putString(1,7,screen,"Mode: "+mode);
 
 			if (!firstMove) {
 				timer = 0;
