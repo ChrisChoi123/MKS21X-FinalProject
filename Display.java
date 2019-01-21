@@ -172,74 +172,54 @@ public class Display {
 	}
 
 	public static String convertMove(String move) {
-		if (move.equals("q")) {
-			return "D";
-		}
-		else if (move.equals("w")) {
-			return "E";
-		}
-		else if (move.equals("e")) {
-			return "U'";
-		}
-		else if (move.equals("a")) {
-			return "B'";
-		}
-		else if (move.equals("s")) {
-			return "S";
-		}
-		else if (move.equals("d")) {
-			return "F";
-		}
-		else if (move.equals("z")) {
-			return "U'";
-		}
-		else if (move.equals("x")) {
-			return "E";
-		}
-		else if (move.equals("c")) {
-			return "D";
-		}
-		else if (move.equals("r")) {
-			return "D";
-		}
-		else if (move.equals("f")) {
-			return "E";
-		}
-		else if (move.equals("v")) {
-			return "U'";
-		}
-		else if (move.equals("t")) {
-			return "L";
-		}
-		else if (move.equals("g")) {
-			return "M";
-		}
-		else if (move.equals("b")) {
-			return "R'";
-		}
-		else if (move.equals("y")) {
-			return "U'";
-		}
-		else if (move.equals("h")) {
-			return "E";
-		}
-		else if (move.equals("n")) {
-			return "D";
-		}
-		else if (move.equals("u")) {
-			return "R'";
-		}
-		else if (move.equals("j")) {
-			return "M";
-		}
-		else if (move.equals("m")) {
-			return "L";
-		}
-		else {
-			return "";
+		String result ="";
+		switch (move){
+			case "q":
+				result = "D"; break;
+			case "w":
+				result = "E"; break;
+			case "e":
+				result = "U"; break;
+			case "a":
+				result = "B"; break;
+			case "s":
+					result = "S"; break;
+			case "d":
+					result = "F"; break;
+			case "z":
+					result = "U"; break;
+			case "x":
+					result = "E"; break;
+			case "c":
+					result = "D"; break;
+			case "r":
+					result = "D"; break;
+			case "f":
+					result = "E"; break;
+			case "v":
+					result = "U"; break;
+			case "t":
+					result = "L"; break;
+			case "g":
+					result = "M"; break;
+			case "b":
+					result = "R"; break;
+			case "y":
+					result = "U"; break;
+			case "h":
+					result = "E"; break;
+			case "n":
+					result = "D"; break;
+			case "u":
+					result = "R"; break;
+			case "j":
+					result = "M"; break;
+			case "m":
+					result = "L"; break;
+			}
+			return result;
 		}
 
-	}
 
 	/**Creates an interactive Screen that allows the user to interact with a
 		*simulation of a Rubik's Cube. The user may turn different sides,
