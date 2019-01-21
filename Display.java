@@ -75,12 +75,14 @@ public class Display {
 	}
 
 	/**Displays the entire Rubik's Cube, made up of 6 sides and laid out like
-		*a sideways cross.
+		*a sideways cross. If the mode is 1, then it will additionally display
+		*the letters of the keys that will move their corresponding rows/column
 		*
 		*@param startX is the x value of the upperleftmost coordinate of the side
 		*on the top row, with an index 3.
 		*@param startY is the y value of the upperleftmost coordinate of the side
 		*on the top row, with an index 3.
+		*@param mode is the mode that tells the program which key presses will move the cube
 		*@param screen is the screen the method displays the Rubik's Cube on
 		*@param cube is the Cube that the method is displaying
 		*
@@ -196,6 +198,12 @@ public class Display {
 		return positions;
 	}
 
+	/**Converts the user friendly letter being pressed during mode 1 into the corresponding WCA move notation.
+		*
+		*@param move is the user-friendly key that the user types
+		*@return the corresponding WCA notation move
+		*
+		*/
 	public static String convertMove(String move) {
 		String result ="";
 		switch (move){
@@ -254,7 +262,6 @@ public class Display {
 		*@param args is the array of the user's inputs, but this program doesn't
 		*actually take any user input this way.
 		*
-		*
 		*/
 	public static void main(String[] args) throws IOException {
 		Screen screen = new DefaultTerminalFactory().createScreen();
@@ -263,45 +270,53 @@ public class Display {
 		  */
 		long tStart = System.currentTimeMillis();
 		long lastSecond = 0;
-
 		long timer = 0;
 		long lastTime = 0;
 		long currentTime = 0;
+
+		/**firstMoves stores whether the move being applied is the first move from being
+			*scrambled or reset
+			*the mode tells the program which set of keys actually manipulates the puzzle
+			*/
 		boolean firstMove = false;
 		int mode = 0;
-		int scrambleSize = 25;
 
-		/**Creates a cube to be simulated, and draws it on the screen
+		/**Creates a cube to be simulated
+			*scramble stores the series of moves in WCA notation that will be applied to the cube
+			*when tab is pressed
 		  */
 		Cube cube = new Cube();
 		String scramble = "";
 
+		/**orignalSize stores the size of the screen, userMoves stores the moves that are applied to the Cube
+			*/
 		TerminalSize originalSize = screen.getTerminalSize();
 		ArrayList<String> userMoves = new ArrayList<String>();
 
-		/**while program is running. stops running when escape is pressed
+		/**runs while program is running. stops running when escape is pressed
 		  */
 		while (true) {
 			KeyStroke key = screen.pollInput();
 			String keyString = "" + key;
 			TerminalSize currentSize = screen.getTerminalSize();
+			//when screen is resized, all of the components of the screen have to be redrawn
 			if (currentSize != originalSize) {
 				screen.clear();
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
 				originalSize = currentSize;
-				putString(0,0,screen,"Scramble: "+scramble);
+				putString(1,0,screen,"Scramble: "+scramble);
 				putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)+"   ");
 				putString(1,7,screen,"Mode: "+mode);
 			}
 
 
 			if (key != null) {
-
+				//exists the program when escape is pressed
 				if (key.getKeyType() == KeyType.Escape) break;
 				else if (key.getKeyType() == KeyType.Character) {
 					// stores the String of the key that was pressed
 					String letterPressed = ""+keyString.charAt(keyString.length()-3);
-					// stores the all the valid moves the user can make
+					// stores the all the valid moves the user can make, depending on the mode
 					String[] validMoves0 = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
 					String[] validMoves1 = new String[] {"q","a","z","w","s","x","e","d","c","r","f","v","t","g","b","y","h","n","u","j","m"};
 					String[] validMoves1Upper = new String[21];
@@ -309,8 +324,10 @@ public class Display {
 						validMoves1Upper[i] = validMoves1[i].toUpperCase();
 					}
 					boolean letterIsValid = false;
+					//changes the mode when 0 or 1 are pressed
 					if (letterPressed.equals("0")) {
 						mode = 0;
+						screen.clear();
 					}
 					if (letterPressed.equals("1")) {
 						mode = 1;
@@ -335,7 +352,7 @@ public class Display {
 						}
 					}
 					//checks to see if it is the first time a move is made from a scrambled or reset position
-					// . if the move being made is valid, and if the size of the amount of moves the
+					// and ff the move being made is valid and if the size of the amount of moves the
 					// user made is 0
 					if (letterIsValid && userMoves.size() == 0) {
 						firstMove = true;
@@ -350,6 +367,8 @@ public class Display {
 							}
 						}
 					}
+					//for mode 1, it has to covert the key pressed to the WCA notation in order to
+					//perform the move
 					if (mode == 1)	{
 						for (int i = 0;i<21;i++) {
 							if (letterPressed.equals(validMoves1[i])) {
@@ -362,7 +381,6 @@ public class Display {
 							}
 						}
 					}
-
 				}
 
 				else if (key.getKeyType() == KeyType.Backspace) {
@@ -393,6 +411,7 @@ public class Display {
 				}
 			}
 
+			//resets the timer when the cube is reset or scrambled
 			if (!firstMove) {
 				timer = 0;
 			}
@@ -412,11 +431,13 @@ public class Display {
 				lastSecond = millis / 1000;
 			}
 
-			putString(0,9,screen,""+originalSize);
+			//these display all the compoments of the screen and updates when
+			//one of the values (like the scramble or caps lock state) are changed
+			putString(1,9,screen,""+originalSize);
 			putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)+"   ");
 			putString(1,7,screen,"Mode: "+mode);
-			putString(0,9,screen,"Dimensions: "+originalSize);
-			putString(0,0,screen,"Scramble: "+scramble);
+			putString(1,9,screen,"Dimensions: "+originalSize);
+			putString(1,0,screen,"Scramble: "+scramble);
 			drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
 
 			screen.doResizeIfNecessary();
