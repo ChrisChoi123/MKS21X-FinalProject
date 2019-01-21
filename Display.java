@@ -179,15 +179,15 @@ public class Display {
 			case "w":
 				result = "E"; break;
 			case "e":
-				result = "U"; break;
+				result = "U'"; break;
 			case "a":
-				result = "B"; break;
+				result = "B'"; break;
 			case "s":
 					result = "S"; break;
 			case "d":
 					result = "F"; break;
 			case "z":
-					result = "U"; break;
+					result = "U'"; break;
 			case "x":
 					result = "E"; break;
 			case "c":
@@ -197,21 +197,21 @@ public class Display {
 			case "f":
 					result = "E"; break;
 			case "v":
-					result = "U"; break;
+					result = "U'"; break;
 			case "t":
 					result = "L"; break;
 			case "g":
 					result = "M"; break;
 			case "b":
-					result = "R"; break;
+					result = "R'"; break;
 			case "y":
-					result = "U"; break;
+					result = "U'"; break;
 			case "h":
 					result = "E"; break;
 			case "n":
 					result = "D"; break;
 			case "u":
-					result = "R"; break;
+					result = "R'"; break;
 			case "j":
 					result = "M"; break;
 			case "m":
