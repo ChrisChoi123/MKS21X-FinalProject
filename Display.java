@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
-/*  Mr. K's TerminalDemo edited for lanterna 3
- */
-
 public class Display {
 	/**Places a given string on the screen.
     *
@@ -182,10 +179,10 @@ public class Display {
 			return "E";
 		}
 		else if (move.equals("e")) {
-			return "U";
+			return "U'";
 		}
 		else if (move.equals("a")) {
-			return "B";
+			return "B'";
 		}
 		else if (move.equals("s")) {
 			return "S";
@@ -194,7 +191,7 @@ public class Display {
 			return "F";
 		}
 		else if (move.equals("z")) {
-			return "U";
+			return "U'";
 		}
 		else if (move.equals("x")) {
 			return "E";
@@ -209,7 +206,7 @@ public class Display {
 			return "E";
 		}
 		else if (move.equals("v")) {
-			return "U";
+			return "U'";
 		}
 		else if (move.equals("t")) {
 			return "L";
@@ -218,10 +215,10 @@ public class Display {
 			return "M";
 		}
 		else if (move.equals("b")) {
-			return "R";
+			return "R'";
 		}
 		else if (move.equals("y")) {
-			return "U";
+			return "U'";
 		}
 		else if (move.equals("h")) {
 			return "E";
@@ -230,7 +227,7 @@ public class Display {
 			return "D";
 		}
 		else if (move.equals("u")) {
-			return "R";
+			return "R'";
 		}
 		else if (move.equals("j")) {
 			return "M";
@@ -274,9 +271,7 @@ public class Display {
 		long lastTime = 0;
 		long currentTime = 0;
 		boolean firstMove = false;
-		boolean firstReset = false;
 		int mode = 0;
-
 
 		/**while program is running. stops running when escape is pressed
 		  */
@@ -308,7 +303,7 @@ public class Display {
 						mode = 0;
 						putString(1,5,screen,"Mode: "+mode);
 					}
-					else if (letterPressed.equals("1")) {
+					if (letterPressed.equals("1")) {
 						mode = 1;
 						putString(1,5,screen,"Mode: "+mode);
 					}
@@ -320,7 +315,7 @@ public class Display {
 							}
 						}
 					}
-					else if (mode == 1) {
+					if (mode == 1) {
 						for (int i = 0;i < validMoves1.length;i++) {
 							if (letterPressed.equals(validMoves1[i])) {
 								letterIsValid = true;
@@ -330,7 +325,7 @@ public class Display {
 					//checks to see if it is the first time a move is made from a scrambled or reset position
 					// . if the move being made is valid, and if the size of the amount of moves the
 					// user made is 0
-					if (!firstReset && letterIsValid && userMoves.size() == 0) {
+					if (letterIsValid && userMoves.size() == 0) {
 						firstMove = true;
 						lastTime = System.currentTimeMillis() / 1000;
 					}
@@ -343,7 +338,7 @@ public class Display {
 							}
 						}
 					}
-					else if (mode == 1)	{
+					if (mode == 1)	{
 						for (int i = 0;i<validMoves1.length;i++) {
 							if (letterPressed.equals(validMoves1[i])) {
 								userMoves.add(convertMove(letterPressed));
@@ -351,7 +346,6 @@ public class Display {
 							}
 						}
 					}
-					firstReset = true;
 
 				}
 
@@ -372,17 +366,15 @@ public class Display {
 					screen.clear();
 					putString(0,0,screen,"Scramble: ");
 					firstMove = false;
-					firstReset = false;
 				}
 				else if (key.getKeyType() == KeyType.Tab) {
-					scramble = cube.generateScramble(20);
+					scramble = cube.generateScramble(2);
 					cube.reset();
 					cube.performMoveSet(scramble);
 					userMoves.clear();
 					screen.clear();
 					putString(0,0,screen,"Scramble: "+scramble);
 					firstMove = false;
-					firstReset = false;
 				}
 				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
 			}
@@ -395,8 +387,8 @@ public class Display {
 			//when the first valid move, after the cube has been reset or scrambled,
 			// has been performed, this continuously updates the timer with the
 			//difference between the time when the first move was made, and the
-			//current time (12 PM January 1, 1970 UTC) in seconds.
-			if (firstMove){
+			//current time in seconds.
+			if (firstMove && !cube.isSolved()){
 				currentTime = System.currentTimeMillis() / 1000;
         timer = (currentTime - lastTime);//add the amount of time since the last frame.
         putString(1,3,screen, "Timer: "+ timer);
@@ -404,10 +396,8 @@ public class Display {
 
 			long tEnd = System.currentTimeMillis();
 			long millis = tEnd - tStart;
-			//putString(1, 2, screen, "Milliseconds since start of program: "+millis);
 			if (millis / 1000 > lastSecond) {
 				lastSecond = millis / 1000;
-				//putString(1, 3, screen, "Seconds since start of program: "+millis/1000);
 			}
 			screen.doResizeIfNecessary();
 			screen.refresh();
