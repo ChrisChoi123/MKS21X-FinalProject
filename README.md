@@ -1,6 +1,21 @@
 # MKS21X-FinalProject
 
-** Developmental Log: **
+**Instructions to run the cube simulator:**
+
+1.javac -cp lanterna.jar:. Display.java
+2.java -cp lanterna.jar:. Display
+3.You may change the dimensions of the screen to the optimal size: 170x47, by manually resizing the SwingTerminalFrame screen that pops up when the program is run. (you can see the current dimensions by referring to numbers following the word "Dimensions:"). However, you may use the program with smaller or larger dimensions, as our program tries its best to resize the cube and center it when the screen is manually resized.
+4.If you want the program to accept user friendly moves, press "1" to change the mode to mode 1. (The default mode, 0, accepts the WCA standard notation to which you can refer to this website to use: https://ruwix.com/the-rubiks-cube/notation/advanced/ ). The following instructions will be written for mode 1.
+5.After you press the "1" key, letters should pop up surrounding the cube. These letters tell you which key you should press to move the corresponding row/column towards the direction the letter is, in relation to the side.
+6.Turning on caps lock and then pressing one of the keys will move the corresponding row/column in the opposite direction from side the letter is located in.
+7.Pressing on the backspace key undos the most recent move. Clicking it in succession continues to undo the preceding moves, all the way until you reach the orignal state of the puzzle.
+8.You can press on the enter key to reset the cube to its solved state.
+9.You can press on the tab key to apply a randomly generated scramble to the puzzle. The scramble will appear on the top of the screen. This notation is strictly in the official WCA notation.
+10.When you click on the tab key or enter key, the timer will start as soon as the first valid move (a move that manipulates the puzzle) is pressed, and will continue counting until the cube is solved.
+11.When you have explored the functionalities of the simulator to your heart's content, or have successfully solved the puzzle, you may exit the program by pressing the escape key.
+
+
+**Developmental Log**
 1/3 Created a constructor that creates a char[][] filled with the respective colors for the 6 sides. Also a toString() that returns the contents in the char[][].
 
 1/4 Created a rotateSide() method that rotate the stickers of a single side when a clockwise turn is applied. This is the first out of 2 private methods that will be used for a complete rotate layer method.
@@ -33,4 +48,4 @@
 
 1/19 We introduced the modes 0 and 1 that accepts a different set of keys to manipulate the cube. Mode 0 accepts the standard WCA notation moves (like F,B,U,D,R,L, and so on) while mode 1 accepts user friendly keys (starting from "q" and all the way to "m") that correspond to the row or column they are moving.
 
-1/21 We displayed the letters next to the row of the cube that they correspond to in mode 1. This allows the user to see which keys move which sides. Also, we fixed the problem with the keys of the same row/column going in different directions. This is because the middle layer moves follows the directions of one of the sides, so the other side will necesarily be going in the opposite direction as the other two. So we added an apostrophe (representing the inverse move) to the one going in the different direction to the other two.  Then we cleaned the main method by removing redundent code and we added comments to many of the variables, if statements, and loops to explain what they do. 
+1/21 We displayed the letters next to the row of the cube that they correspond to in mode 1. This allows the user to see which keys move which sides. Also, we fixed the problem with the keys of the same row/column going in different directions. This is because the middle layer moves follows the directions of one of the sides, so the other side will necesarily be going in the opposite direction as the other two. So we added an apostrophe (representing the inverse move) to the one going in the different direction to the other two.  Then we cleaned the main method by removing redundent code and we added comments to many of the variables, if statements, and loops to explain what they do.
