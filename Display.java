@@ -269,11 +269,11 @@ public class Display {
 		long currentTime = 0;
 		boolean firstMove = false;
 		int mode = 0;
+		int scrambleSize = 25;
 
 		/**Creates a cube to be simulated, and draws it on the screen
 		  */
 		Cube cube = new Cube();
-		drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode, screen,cube);
 		String scramble = "";
 
 		TerminalSize originalSize = screen.getTerminalSize();
@@ -311,17 +311,15 @@ public class Display {
 					boolean letterIsValid = false;
 					if (letterPressed.equals("0")) {
 						mode = 0;
-						putString(1,5,screen,"Mode: "+mode);
 					}
 					if (letterPressed.equals("1")) {
 						mode = 1;
-						putString(1,5,screen,"Mode: "+mode);
 					}
 
 					//checks to see if the move being made is a valid move
 					if (mode == 0) {
 						for (int i = 0;i < validMoves0.length;i++) {
-							if (letterPressed.equals(validMoves1[i])) {
+							if (letterPressed.equals(validMoves0[i])) {
 								letterIsValid = true;
 							}
 						}
@@ -351,7 +349,6 @@ public class Display {
 								cube.performMove(letterPressed);
 							}
 						}
-						drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
 					}
 					if (mode == 1)	{
 						for (int i = 0;i<21;i++) {
@@ -364,7 +361,6 @@ public class Display {
 								cube.performMove(convertMove(letterPressed.toLowerCase())+"'");
 							}
 						}
-						drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
 					}
 
 				}
@@ -381,25 +377,21 @@ public class Display {
 					}
 				}
 				else if (key.getKeyType() == KeyType.Enter) {
+					scramble = "";
 					userMoves.clear();
 					cube.reset();
 					screen.clear();
-					putString(0,0,screen,"Scramble: ");
 					firstMove = false;
 				}
 				else if (key.getKeyType() == KeyType.Tab) {
-					scramble = cube.generateScramble(2);
+					scramble = cube.generateScramble(25);
 					cube.reset();
 					cube.performMoveSet(scramble);
 					userMoves.clear();
 					screen.clear();
-					putString(0,0,screen,"Scramble: "+scramble);
 					firstMove = false;
 				}
-				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
 			}
-			putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)+"   ");
-			putString(1,7,screen,"Mode: "+mode);
 
 			if (!firstMove) {
 				timer = 0;
@@ -419,6 +411,14 @@ public class Display {
 			if (millis / 1000 > lastSecond) {
 				lastSecond = millis / 1000;
 			}
+
+			putString(0,9,screen,""+originalSize);
+			putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)+"   ");
+			putString(1,7,screen,"Mode: "+mode);
+			putString(0,9,screen,"Dimensions: "+originalSize);
+			putString(0,0,screen,"Scramble: "+scramble);
+			drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
+
 			screen.doResizeIfNecessary();
 			screen.refresh();
 	 	}
