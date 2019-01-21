@@ -1,5 +1,6 @@
 # MKS21X-FinalProject
-Developmental Log:
+
+** Developmental Log: **
 1/3 Created a constructor that creates a char[][] filled with the respective colors for the 6 sides. Also a toString() that returns the contents in the char[][].
 
 1/4 Created a rotateSide() method that rotate the stickers of a single side when a clockwise turn is applied. This is the first out of 2 private methods that will be used for a complete rotate layer method.
@@ -31,3 +32,5 @@ Developmental Log:
 1/18: We created a convertMove method that converts the standard notation to user friendly key.
 
 1/19 We introduced the modes 0 and 1 that accepts a different set of keys to manipulate the cube. Mode 0 accepts the standard WCA notation moves (like F,B,U,D,R,L, and so on) while mode 1 accepts user friendly keys (starting from "q" and all the way to "m") that correspond to the row or column they are moving.
+
+1/21 We displayed the letters next to the row of the cube that they correspond to in mode 1. This allows the user to see which keys move which sides. Also, we fixed the problem with the keys of the same row/column going in different directions. This is because the middle layer moves follows the directions of one of the sides, so the other side will necesarily be going in the opposite direction as the other two. So we added an apostrophe (representing the inverse move) to the one going in the different direction to the other two.  Then we cleaned the main method by removing redundent code and we added comments to many of the variables, if statements, and loops to explain what they do. 
