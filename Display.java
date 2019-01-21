@@ -85,7 +85,7 @@ public class Display {
 		*@param cube is the Cube that the method is displaying
 		*
 		*/
-	public static void drawCube(int[] size,int[] startingPositions,Screen screen, Cube cube){
+	public static void drawCube(int[] size,int[] startingPositions, int mode, Screen screen, Cube cube){
 		int length = size[0];
 		int height = size[1];
 		int startX = startingPositions[0];
@@ -96,6 +96,31 @@ public class Display {
 		drawSide(2,startX+3*length,startY+3*height,size,screen,cube);
 		drawSide(5,startX+6*length,startY+3*height,size,screen,cube);
 		drawSide(1,startX,startY+6*height,size,screen,cube);
+		if (mode == 1) {
+			//Horizontal movements
+			putString(startX-1,startY,screen,"q");
+			putString(startX-1,startY+height,screen,"w");
+			putString(startX-1,startY+height*2,screen,"e");
+			putString(startX+length*9,startY+height*3,screen,"a");
+			putString(startX+length*9,startY+height*4,screen,"s");
+			putString(startX+length*9,startY+height*5,screen,"d");
+			putString(startX+length*3,startY+height*6,screen,"z");
+			putString(startX+length*3,startY+height*7,screen,"x");
+			putString(startX+length*3,startY+height*8,screen,"c");
+			//Vertical movements
+			putString(startX-3*length,startY+height*6,screen,"r");
+			putString(startX-2*length,startY+height*6,screen,"f");
+			putString(startX-length,startY+height*6,screen,"v");
+			putString(startX,startY+height*9,screen,"t");
+			putString(startX+length,startY+height*9,screen,"g");
+			putString(startX+length*2,startY+height*9,screen,"b");
+			putString(startX+length*3,startY+height*3-1,screen,"y");
+			putString(startX+length*4,startY+height*3-1,screen,"h");
+			putString(startX+length*5,startY+height*3-1,screen,"n");
+			putString(startX+length*6,startY+height*3-1,screen,"u");
+			putString(startX+length*7,startY+height*3-1,screen,"j");
+			putString(startX+length*8,startY+height*3-1,screen,"m");
+		}
 	}
 
 	/**Given a screen, the method calculates its dimensions, and, depending on the
@@ -238,20 +263,21 @@ public class Display {
 		  */
 		long tStart = System.currentTimeMillis();
 		long lastSecond = 0;
-		/**Creates a cube to be simulated, and draws it on the screen
-		  */
-		Cube cube = new Cube();
-		drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
-		String scramble = "";
-
-		TerminalSize originalSize = screen.getTerminalSize();
-		ArrayList<String> userMoves = new ArrayList<String>();
 
 		long timer = 0;
 		long lastTime = 0;
 		long currentTime = 0;
 		boolean firstMove = false;
 		int mode = 0;
+
+		/**Creates a cube to be simulated, and draws it on the screen
+		  */
+		Cube cube = new Cube();
+		drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode, screen,cube);
+		String scramble = "";
+
+		TerminalSize originalSize = screen.getTerminalSize();
+		ArrayList<String> userMoves = new ArrayList<String>();
 
 		/**while program is running. stops running when escape is pressed
 		  */
@@ -261,7 +287,7 @@ public class Display {
 			TerminalSize currentSize = screen.getTerminalSize();
 			if (currentSize != originalSize) {
 				screen.clear();
-				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
+				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
 				originalSize = currentSize;
 				putString(0,0,screen,"Scramble: "+scramble);
 				putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)+"   ");
@@ -278,6 +304,10 @@ public class Display {
 					// stores the all the valid moves the user can make
 					String[] validMoves0 = new String[] {"F","B","U","D","R","L","f","b","u","d","r","l","M","S","E","x","y","z"};
 					String[] validMoves1 = new String[] {"q","a","z","w","s","x","e","d","c","r","f","v","t","g","b","y","h","n","u","j","m"};
+					String[] validMoves1Upper = new String[21];
+					for (int i = 0;i < 21;i++) {
+						validMoves1Upper[i] = validMoves1[i].toUpperCase();
+					}
 					boolean letterIsValid = false;
 					if (letterPressed.equals("0")) {
 						mode = 0;
@@ -287,6 +317,7 @@ public class Display {
 						mode = 1;
 						putString(1,5,screen,"Mode: "+mode);
 					}
+
 					//checks to see if the move being made is a valid move
 					if (mode == 0) {
 						for (int i = 0;i < validMoves0.length;i++) {
@@ -298,6 +329,9 @@ public class Display {
 					if (mode == 1) {
 						for (int i = 0;i < validMoves1.length;i++) {
 							if (letterPressed.equals(validMoves1[i])) {
+								letterIsValid = true;
+							}
+							if (letterPressed.equals(validMoves1Upper[i])) {
 								letterIsValid = true;
 							}
 						}
@@ -317,14 +351,20 @@ public class Display {
 								cube.performMove(letterPressed);
 							}
 						}
+						drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
 					}
 					if (mode == 1)	{
-						for (int i = 0;i<validMoves1.length;i++) {
+						for (int i = 0;i<21;i++) {
 							if (letterPressed.equals(validMoves1[i])) {
 								userMoves.add(convertMove(letterPressed));
 								cube.performMove(convertMove(letterPressed));
 							}
+							if (letterPressed.equals(validMoves1Upper[i])) {
+								userMoves.add(convertMove(letterPressed.toLowerCase())+"'");
+								cube.performMove(convertMove(letterPressed.toLowerCase())+"'");
+							}
 						}
+						drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
 					}
 
 				}
@@ -356,7 +396,7 @@ public class Display {
 					putString(0,0,screen,"Scramble: "+scramble);
 					firstMove = false;
 				}
-				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),screen,cube);
+				drawCube(getSize(screen), getStartingPositions((screen),getSize(screen)),mode,screen,cube);
 			}
 			putString(1,5,screen,"Caps lock is on: "+Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)+"   ");
 			putString(1,7,screen,"Mode: "+mode);
