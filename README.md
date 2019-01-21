@@ -27,3 +27,7 @@ Developmental Log:
 1/15 We created 3 new long variables in the static void main to store the time starting from when the first move is made and continuously updates. 2 boolean variables were made to keep track of when the cube was being scrambled or reset for the first time, as we want the continuous updating of the timer to happen only when the first move has been pressed. When we first tried to keep track of this, we only used 1 variable, firstMove, that becomes true when the first move is pressed, but we found that when moves are performed and then subsequently all undone, the timer resets back to 0 when the next move is made (we want the timer to keep going until the cube is solved or its reset/scrambled again). We had to create another boolean, firstReset that turns to true whenever any move was made to fix this problem.
 
 1/16 We displayed whether the capslocks is on or off on the screen. After the demo, we had a feedback regarding the feasibility of interface. We will add different keys so that the user can solve easily cube without necessarily knowing Rubik's Cube notation.
+
+1/18: We created a convertMove method that converts the standard notation to user friendly key.
+
+1/19 We introduced the modes 0 and 1 that accepts a different set of keys to manipulate the cube. Mode 0 accepts the standard WCA notation moves (like F,B,U,D,R,L, and so on) while mode 1 accepts user friendly keys (starting from "q" and all the way to "m") that correspond to the row or column they are moving.
